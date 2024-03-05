@@ -25,8 +25,8 @@ import './App.css'
 import {useSelector} from "react-redux";
 
 function App() {
-    const menu = useSelector(state => state.menu.menu);
-
+    const menu = useSelector(state => state.interactivity.menu);
+    console.log(menu)
   return (
     <div>
         <Router>
@@ -56,12 +56,12 @@ function App() {
                     <div className={"fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full"}>
                         <Navbar/>
                     </div>
-                </div>
+
                 <div>
                     <Routes>
                         {/* Dashboard*/}
                         <Route path={"/"} element={<Ecommerce />}/>
-                        <Route path={"/sms"} element={<Ecommerce/>}/>
+                        <Route path={"/ecommerce"} element={<Ecommerce/>}/>
                         {/*Pages*/}
                         <Route path={"/orders"} element={<Orders/>}/>
                         <Route path={"/employees"} element={<Employees/>}/>
@@ -83,6 +83,7 @@ function App() {
                         <Route path={"/stacked-chart"} element={<Stacked/>}/>
 
                     </Routes>
+                </div>
                 </div>
             </div>
         </Router>

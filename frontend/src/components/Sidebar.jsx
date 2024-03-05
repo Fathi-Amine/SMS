@@ -8,17 +8,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu } from '../redux/interactivitySlices.js'
 
 const Sidebar = () => {
-    const menu = useSelector(state => state.menu.menu);
-    const activeMenu = true;
+    const menu = useSelector(state => state.interactivity.menu);
+    const screenSize = useSelector(state => state.interactivity.screenSize);
     const activeLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-white text-md m-2";
     const normalLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2"
     const dispatch = useDispatch();
+
+    const handleCloseMenu = () => {
+        if (menu && screenSize <= 900) {
+            dispatch(toggleMenu());
+        }
+    }
     return (
         <div className={"ml-3 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10"}>
             {menu && (
                 <>
                     <div className={"flex justify-between items-center"}>
-                        <Link to={"/"} onClick={()=> {}} className={"items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900"}>
+                        <Link to={"/"} onClick={handleCloseMenu} className={"items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900"}>
                             <FaSchoolFlag /><span>Dashy</span>
                         </Link>
                         <TooltipComponent content={"Menu"} position={"BottomCenter"}>
@@ -40,7 +46,7 @@ const Sidebar = () => {
                                     <NavLink to={`/${link.name}`}
                                              key={index}
                                              className={({isActive})=> isActive ? activeLink : normalLink}
-                                             onClick={()=>{}}
+                                             onClick={handleCloseMenu}
 
                                     >
                                         <span>{link.icon}</span>
