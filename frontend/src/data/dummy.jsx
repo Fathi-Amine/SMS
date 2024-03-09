@@ -302,6 +302,50 @@ export const barCustomSeries = [
     },
   },
 ];
+
+export const tasks = [{
+  id: 1,
+  icon: "⭕️",
+  status: "open",
+  title: "Human Interest Form",
+  content: "Fill out human interest distribution form"
+}, {
+  id: 2,
+  icon: "⭕️",
+  status: "open",
+  title: "Purchase present",
+  content: "Get an anniversary gift"
+}, {
+  id: 3,
+  icon: "⭕️",
+  status: "open",
+  title: "Invest in investments",
+  content: "Call the bank to talk about investments"
+}, {
+  id: 4,
+  icon: "⭕️",
+  status: "open",
+  title: "Daily reading",
+  content: "Finish reading Intro to UI/UX"
+}];
+
+export const statuses = [{
+  status: "open",
+  icon: "⭕️",
+  color: "#EB5A46"
+}, {
+  status: "in progress",
+  icon: "🔆️",
+  color: "#00C2E0"
+}, {
+  status: "in review",
+  icon: "📝",
+  color: "#C377E0"
+}, {
+  status: "done",
+  icon: "✅",
+  color: "#3981DE"
+}];
 export const colorMappingData = [
   [
     { x: 'Jan', y: 6.96 },
@@ -13873,5 +13917,6 @@ export const people = [
     gender: "Female",
     date_of_birth: "2014-07-27T07:06:35Z",
   },
+
 ];
 
