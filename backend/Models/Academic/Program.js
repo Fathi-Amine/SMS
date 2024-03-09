@@ -45,6 +45,7 @@ const ProgramSchema = new Schema(
                 ref: "Teacher",
             },
         ],
+        //we will push the students that are in the program when the program is created
         students: [
             {
                 type: Schema.Types.ObjectId,
