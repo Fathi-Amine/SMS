@@ -4,7 +4,7 @@ const app = express();
 const adminRoutes = require('../Routes/Staff/adminRoutes');
 
 app.use(morgan('dev'));
-
+app.use(express.json());
 app.use('/api/v1/admins', adminRoutes);
 
 
