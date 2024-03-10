@@ -23,10 +23,29 @@ const registerAdmin = async (req, res) => {
 }
 
 const loginAdmin = async (req, res) => {
+    const {email, password} = req.body;
     try {
-        res.status(200).json({
-            message: 'Admin logged in successfully'
-        });
+        const admin = await Admin.findOne({email});
+        if (!admin) {
+            return res.status(404).json({
+                message: 'Admin not found'
+            });
+        }
+
+        if(admin && (await admin.comparePassword(password))) {
+            return res.status(200).json({
+                data: {
+                    name: admin.name,
+                    email: admin.email,
+                    role: admin.role
+                },
+                message: 'Admin logged in successfully'
+            });
+        }else {
+            return res.status(401).json({
+                message: 'Invalid email or password'
+            });
+        }
     }catch (e) {
         res.status(500).json({
             message: 'Internal server error'
