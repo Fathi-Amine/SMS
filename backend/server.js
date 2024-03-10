@@ -1,4 +1,5 @@
 const http = require('http');
+require('./Config/DbConnect')
 const app = require('./App/app');
 
 const port = process.env.PORT || 3000;
