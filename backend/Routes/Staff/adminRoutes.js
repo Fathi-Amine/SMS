@@ -1,7 +1,21 @@
 const express = require('express');
-const {registerAdmin, loginAdmin, logoutAdmin, getAllAdmins, getSingleAdmin, updateAdmin, deleteAdmin, suspendTeacher,
-    unsuspendTeacher, withdrawTeacher, unwithdrawTeacher, publishExamResults, unpublishExamResults
+const {
+    registerAdmin,
+    loginAdmin,
+    logoutAdmin,
+    getAllAdmins,
+    getSingleAdmin,
+    updateAdmin,
+    deleteAdmin,
+    suspendTeacher,
+    unsuspendTeacher,
+    withdrawTeacher,
+    unwithdrawTeacher,
+    publishExamResults,
+    unpublishExamResults
 } = require("../../Controllers/Staff/adminController");
+const {isLoggedIn} = require('../../Middlewares/authMiddleware');
+
 const adminRoutes = express.Router();
 
 adminRoutes.post('/register', registerAdmin);
@@ -10,7 +24,7 @@ adminRoutes.post('/login', loginAdmin);
 
 adminRoutes.post('/logout', logoutAdmin)
 
-adminRoutes.get('/', getAllAdmins);
+adminRoutes.get('/',isLoggedIn, getAllAdmins);
 
 adminRoutes.get('/:id', getSingleAdmin);
 
