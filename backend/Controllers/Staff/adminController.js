@@ -1,6 +1,8 @@
 const Admin = require('../../Models/Staff/Admin');
+const Token = require('../../Models/Global/Token');
 const AsyncHandler = require('express-async-handler');
-const {genPassword} = require("../../Utils/authUtils");
+const {genPassword, issueJWT, attachCookieToResponse} = require("../../Utils/authUtils");
+const crypto = require('crypto');
 
 const registerAdmin = AsyncHandler(async (req, res) => {
     const {name, email, password} = req.body;
@@ -22,37 +24,61 @@ const registerAdmin = AsyncHandler(async (req, res) => {
     res.status(201).json({data: user, message: 'Admin created successfully'});
 })
 
-const loginAdmin = async (req, res) => {
+const loginAdmin = AsyncHandler(async (req, res) => {
     const {email, password} = req.body;
-    try {
-        const admin = await Admin.findOne({email});
-        if (!admin) {
-            return res.status(404).json({
-                message: 'Admin not found'
-            });
-        }
+    const admin = await Admin.findOne({email});
+    if (!admin) {
+        return res.status(404).json({
+            message: 'Admin not found'
+        });
+    }
 
-        if(admin && (await admin.comparePassword(password))) {
-            req.isAuthenticated = true;
+    const tokenUser = {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+    }
+
+    if(admin && (await admin.comparePassword(password))) {
+        let refreshToken = ""
+        if (admin.token) {
+            const token = await Token.findById(admin.token);
+            refreshToken = token.refreshToken;
+            attachCookieToResponse({res, user: tokenUser, refreshToken});
             return res.status(200).json({
                 data: {
                     name: admin.name,
                     email: admin.email,
-                    role: admin.role
+                    role: admin.role,
                 },
                 message: 'Admin logged in successfully'
             });
-        }else {
-            return res.status(401).json({
-                message: 'Invalid email or password'
-            });
         }
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
+        const token = await Token.create({
+            refreshToken: crypto.randomBytes(40).toString('hex'),
+            ip: req.ip,
+            userAgent: req.headers['user-agent'],
+            isValid: true
+        });
+        admin.token = token._id;
+        await admin.save();
+        const userResponse = {
+            name: admin.name,
+            email: admin.email,
+            role: admin.role,
+        }
+        attachCookieToResponse({res, user: tokenUser, refreshToken: token.refreshToken})
+        return res.status(200).json({
+            data: userResponse,
+            message: 'Admin logged in successfully'
+        });
+    }else {
+        return res.status(401).json({
+            message: 'Invalid email or password'
         });
     }
-}
+})
 
 const logoutAdmin =async (req, res) => {
     try {
@@ -67,6 +93,7 @@ const logoutAdmin =async (req, res) => {
 }
 
 const getAllAdmins =async (req, res) => {
+    console.log(req.user)
     try {
         res.status(200).json({
             message: 'All admins retrieved successfully'
@@ -78,17 +105,18 @@ const getAllAdmins =async (req, res) => {
     }
 }
 
-const getSingleAdmin =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Admin retrieved successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
-        });
+const getAdminProfile =AsyncHandler(async (req, res) => {
+        try {
+            res.status(200).json({
+                message: 'Admin retrieved successfully'
+            });
+        }catch (e) {
+            res.status(500).json({
+                message: 'Internal server error'
+            });
+        }
     }
-}
+)
 
 const updateAdmin =async (req, res) => {
     try {
@@ -190,7 +218,7 @@ module.exports = {
     loginAdmin,
     logoutAdmin,
     getAllAdmins,
-    getSingleAdmin,
+    getAdminProfile,
     updateAdmin,
     deleteAdmin,
     suspendTeacher,

@@ -21,7 +21,11 @@ const adminSchema = new mongoose.Schema(
     },
     salt: {
       type: String,
-    }
+    },
+    token: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Token'
+    },
   },
   {
     timestamps: true,

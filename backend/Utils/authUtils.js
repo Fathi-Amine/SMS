@@ -47,28 +47,24 @@ function genPassword(password) {
 }
 
 
-/**
- * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
- */
-function issueJWT(user) {
-    const _id = user._id;
-
-    const expiresIn = '1d';
-
-    const payload = {
-        sub: _id,
-        iat: Date.now()
-    };
-
-    const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' });
+function issueJWT({payload}) {
+    const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {  algorithm: 'RS256' });
 
     return {
         token: "Bearer " + signedToken,
-        expires: expiresIn
     }
 }
 
-function authMiddleware(req, res, next) {
+function verifyToken(token) {
+    const tokenParts = token.split(' ');
+
+    if (tokenParts[0] === 'Bearer' && tokenParts[1].match(/\S+\.\S+\.\S+/) !== null) {
+
+        return jsonwebtoken.verify(tokenParts[1], PUB_KEY, { algorithms: ['RS256'] });
+    }
+}
+
+/*function authMiddleware(req, res, next) {
     const tokenParts = req.headers.authorization.split(' ');
 
     if (tokenParts[0] === 'Bearer' && tokenParts[1].match(/\S+\.\S+\.\S+/) !== null) {
@@ -86,9 +82,31 @@ function authMiddleware(req, res, next) {
     }
 
 
+}*/
+
+const attachCookieToResponse = ({res, user,refreshToken})=>{
+    const accessTokenJWT = issueJWT({payload:{user}})
+    const refreshTokenJWT = issueJWT({payload: {user, refreshToken}})
+
+    const oneDay = 1000*60*60*24
+    const oneMonth = 1000*60*60*24*30
+    res.cookie('accessToken', accessTokenJWT, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        signed: true,
+        maxAge:oneDay,
+    })
+    res.cookie('refreshToken', refreshTokenJWT, {
+        httpOnly: true,
+        expires: new Date(Date.now() + oneMonth),
+        secure: process.env.NODE_ENV === 'production',
+        signed: true,
+    })
 }
 
 module.exports.validPassword = validPassword;
 module.exports.genPassword = genPassword;
 module.exports.issueJWT = issueJWT;
-module.exports.authMiddleware = authMiddleware;
+module.exports.verifyToken = verifyToken;
+/*module.exports.authMiddleware = authMiddleware;*/
+module.exports.attachCookieToResponse = attachCookieToResponse;
