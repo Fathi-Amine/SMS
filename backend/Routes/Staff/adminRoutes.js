@@ -26,7 +26,7 @@ adminRoutes.post('/logout', logoutAdmin)
 
 adminRoutes.get('/',authMiddleware, getAllAdmins);
 
-adminRoutes.get('/:id', authMiddleware, getAdminProfile);
+adminRoutes.get('/profile', authMiddleware, getAdminProfile);
 
 // Update a single admin
 adminRoutes.put('/update-admin/:id', updateAdmin);
