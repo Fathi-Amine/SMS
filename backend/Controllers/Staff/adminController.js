@@ -10,6 +10,7 @@ const registerAdmin = AsyncHandler(async (req, res) => {
         error.statusCode = 409;
         throw error;
     }
+    // generate hash and salt
     const {hash, salt} = genPassword(password);
     console.log(hash, salt)
     const user = await Admin.create({
