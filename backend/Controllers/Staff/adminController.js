@@ -28,6 +28,7 @@ const loginAdmin = async (req, res) => {
         }
 
         if(admin && (await admin.comparePassword(password))) {
+            req.isAuthenticated = true;
             return res.status(200).json({
                 data: {
                     name: admin.name,
