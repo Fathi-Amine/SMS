@@ -106,15 +106,16 @@ const getAllAdmins =async (req, res) => {
 }
 
 const getAdminProfile =AsyncHandler(async (req, res) => {
-        try {
-            res.status(200).json({
-                message: 'Admin retrieved successfully'
-            });
-        }catch (e) {
-            res.status(500).json({
-                message: 'Internal server error'
-            });
-        }
+            const admin = await Admin.findById(req.user.id).select('-hash -salt -token -__v -updatedAt -createdAt');
+            if (!admin) {
+                throw new Error('Admin not found');
+            }else {
+                res.status(200).json({
+                    status: 'success',
+                    data: admin,
+                    message: 'Admin retrieved successfully'
+                });
+            }
     }
 )
 
