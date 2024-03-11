@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const {genPassword, validPassword} = require("../../Utils/authUtils");
 
 const adminSchema = new mongoose.Schema(
   {
@@ -11,34 +12,26 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
     role: {
       type: String,
       default: "admin",
     },
+    hash: {
+      type: String,
+    },
+    salt: {
+      type: String,
+    }
   },
   {
     timestamps: true,
   }
 );
 
-// hash password before saving
-adminSchema.pre("save", async function (next) {
-
-    const salt = await bcrypt.genSalt(10);
-  if (!this.isModified("password")) {
-    next();
-  }
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
 
 // compare password
-adminSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+adminSchema.methods.comparePassword = function (enteredPassword) {
+  return validPassword(enteredPassword, this.hash, this.salt);
 };
 
 //model
