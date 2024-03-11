@@ -1,5 +1,6 @@
 const Admin = require('../../Models/Staff/Admin');
 const AsyncHandler = require('express-async-handler');
+const {genPassword} = require("../../Utils/authUtils");
 
 const registerAdmin = AsyncHandler(async (req, res) => {
     const {name, email, password} = req.body;
@@ -9,10 +10,14 @@ const registerAdmin = AsyncHandler(async (req, res) => {
         error.statusCode = 409;
         throw error;
     }
+    // generate hash and salt
+    const {hash, salt} = genPassword(password);
+    console.log(hash, salt)
     const user = await Admin.create({
         name,
         email,
-        password
+        hash,
+        salt
     });
     res.status(201).json({data: user, message: 'Admin created successfully'});
 })
