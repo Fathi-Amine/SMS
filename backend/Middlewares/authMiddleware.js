@@ -10,7 +10,7 @@ const isLoggedIn = (req, res, next) => {
         next(error);
     }
 }
-
+// middleware exports
 module.exports = {
     isLoggedIn
 };
