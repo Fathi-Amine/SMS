@@ -1,7 +1,7 @@
 const Admin = require('../../Models/Staff/Admin');
 const Token = require('../../Models/Global/Token');
 const AsyncHandler = require('express-async-handler');
-const {genPassword, issueJWT, attachCookieToResponse} = require("../../Utils/authUtils");
+const {genPassword, attachCookieToResponse} = require("../../Utils/authUtils");
 const crypto = require('crypto');
 
 const registerAdmin = AsyncHandler(async (req, res) => {
@@ -118,17 +118,29 @@ const getAdminProfile =AsyncHandler(async (req, res) => {
     }
 )
 
-const updateAdmin =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Admin updated successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
-        });
+const updateAdmin = AsyncHandler(async (req, res) => {
+    const {name, email, password} = req.body;
+    const {hash, salt} = genPassword(password);
+    if (email !== req.user.email) {
+        const emailExists = await Admin.findOne({email});
+        if (emailExists) {
+            const error = new Error('Email already exists');
+            error.statusCode = 409;
+            throw error;
+        }
     }
-}
+    const updatedAdmin = await Admin.findByIdAndUpdate(req.user.id, {
+        name,
+        email,
+        hash,
+        salt
+    }, {new: true});
+    return res.status(200).json({
+        status: 'success',
+        data: updatedAdmin,
+        message: 'Admin updated successfully'
+    });
+})
 
 const deleteAdmin =async (req, res) => {
     try {
