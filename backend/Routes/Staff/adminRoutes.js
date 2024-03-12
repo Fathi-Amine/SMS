@@ -15,6 +15,7 @@ const {
     unpublishExamResults
 } = require("../../Controllers/Staff/adminController");
 const {isLoggedIn, authMiddleware} = require('../../Middlewares/authMiddleware');
+const isAdminMiddleware = require("../../Middlewares/isAdminMiddleware");
 
 const adminRoutes = express.Router();
 
@@ -26,7 +27,7 @@ adminRoutes.post('/logout', logoutAdmin)
 
 adminRoutes.get('/',authMiddleware, getAllAdmins);
 
-adminRoutes.get('/profile', authMiddleware, getAdminProfile);
+adminRoutes.get('/profile', authMiddleware, isAdminMiddleware, getAdminProfile);
 
 // Update a single admin
 adminRoutes.put('/update-admin/:id', updateAdmin);
