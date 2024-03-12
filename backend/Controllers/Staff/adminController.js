@@ -92,18 +92,17 @@ const logoutAdmin =async (req, res) => {
     }
 }
 
-const getAllAdmins =async (req, res) => {
-    console.log(req.user)
-    try {
-        res.status(200).json({
-            message: 'All admins retrieved successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
-        });
+const getAllAdmins = AsyncHandler(async (req, res) => {
+    const admins = await Admin.find().select('-hash -salt -token -__v -updatedAt -createdAt');
+    if (!admins) {
+        throw new Error('No admin found');
     }
-}
+    res.status(200).json({
+        status: 'success',
+        data: admins,
+        message: 'Admins retrieved successfully'
+    });
+})
 
 const getAdminProfile =AsyncHandler(async (req, res) => {
             const admin = await Admin.findById(req.user.id).select('-hash -salt -token -__v -updatedAt -createdAt');
