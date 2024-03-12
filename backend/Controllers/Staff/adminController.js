@@ -105,7 +105,7 @@ const getAllAdmins = AsyncHandler(async (req, res) => {
 })
 
 const getAdminProfile =AsyncHandler(async (req, res) => {
-            const admin = await Admin.findById(req.user.id).select('-hash -salt -token -__v -updatedAt -createdAt');
+            const admin = await Admin.findById(req.user.id).select('-hash -salt -token -__v -updatedAt -createdAt').populate('academicYear');
             if (!admin) {
                 throw new Error('Admin not found');
             }else {
