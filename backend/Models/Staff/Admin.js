@@ -26,6 +26,36 @@ const adminSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: 'Token'
     },
+    academicTerm: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'AcademicTerm'
+        }
+    ],
+    academicYear: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'AcademicYear'
+        }
+    ],
+    classLevels: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'ClassLevel'
+        }
+    ],
+    teachers: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'Teacher'
+        }
+    ],
+    students: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'Student'
+        }
+    ],
   },
   {
     timestamps: true,
