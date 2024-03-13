@@ -21,7 +21,6 @@ const authMiddleware = async (req, res, next) => {
 
     try {
         if (accessToken.token){
-            console.log(accessToken)
             const payload = verifyToken(accessToken.token)
             req.user = payload.user
             return next()
