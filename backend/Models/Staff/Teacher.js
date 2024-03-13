@@ -9,9 +9,18 @@ const teacherSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        password: {
+        hash: {
             type: String,
             required: true,
+        },
+
+        salt: {
+            type: String,
+            required: true,
+        },
+        token: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Token'
         },
         dateEmployed: {
             type: Date,
