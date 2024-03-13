@@ -44,7 +44,8 @@ const adminSchema = new mongoose.Schema(
             ref: 'ClassLevel'
         }
     ],
-      programs: [
+
+    programs: [
         {
             type: mongoose.Types.ObjectId,
             ref: 'Program'
@@ -60,6 +61,12 @@ const adminSchema = new mongoose.Schema(
         {
             type: mongoose.Types.ObjectId,
             ref: 'Student'
+        }
+    ],
+    yearGroups: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'YearGroup'
         }
     ],
   },
