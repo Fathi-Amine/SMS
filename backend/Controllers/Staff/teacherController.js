@@ -4,6 +4,11 @@ const { genPassword, validPassword } = require("../../utils/authUtils");
 const Token = require("../../Models/Global/Token");
 const {attachCookieToResponse} = require("../../Utils/authUtils");
 const crypto = require("crypto");
+const Admin = require("../../Models/Staff/Admin");
+const Program = require("../../Models/Academic/Program")
+const ClassLevel = require("../../Models/Academic/ClasseLevel")
+const AcademicYear = require("../../Models/Academic/AcademicYear");
+const Subject = require("../../Models/Academic/Subject");
 
 
 exports.adminRegisterTeacher = AysncHandler(async (req, res) => {
@@ -79,4 +84,138 @@ exports.teacherLogin = AysncHandler(async (req, res) => {
             message: 'Invalid email or password'
         });
     }
+});
+
+exports.adminGettingAllTeachers = AysncHandler(async (req, res) => {
+    const teachers = await Teacher.find().select("-hash -salt -token");
+    res.status(200).json({
+        status: "success",
+        message: "Teachers fetched successfully",
+        data: teachers,
+    });
+});
+
+exports.getTeacherByAdmin = AysncHandler(async (req, res) => {
+    const teacherID = req.params.teacherID;
+    //find the teacher
+    const teacher = await Teacher.findById(teacherID);
+    if (!teacher) {
+        throw new Error("Teacher not found");
+    }
+    res.status(200).json({
+        status: "success",
+        message: "Teacher fetched successfully",
+        data: teacher,
+    });
+});
+
+exports.getTeacherProfile = AysncHandler(async (req, res) => {
+    const teacher = await Teacher.findById(req.user?.id).select(
+        "-hash -salt -createdAt -updatedAt"
+    );
+    if (!teacher) {
+        throw new Error("Teacher not found");
+    }
+    res.status(200).json({
+        status: "success",
+        data: teacher,
+        message: "Teacher Profile fetched  successfully",
+    });
+});
+
+
+exports.teacherUpdateProfile = AysncHandler(async (req, res) => {
+    const {name, email, password} = req.body;
+    const {hash, salt} = genPassword(password);
+    if (email !== req.user.email) {
+        const emailExists = await Teacher.findOne({email});
+        if (emailExists) {
+            const error = new Error('Email already exists');
+            error.statusCode = 409;
+            throw error;
+        }
+    }
+    const updatedTeacher = await Teacher.findByIdAndUpdate(req.user.id, {
+        name,
+        email,
+        hash,
+        salt
+    }, {new: true});
+    return res.status(200).json({
+        status: 'success',
+        data: updatedTeacher,
+        message: 'Teacher updated successfully'
+    });
+});
+
+
+exports.adminUpdateTeacher = AysncHandler(async (req, res) => {
+    const { program, classLevel, academicYear, subject } = req.body;
+    const updates = {};
+    //if email is taken
+    const teacherFound = await Teacher.findById(req.params.teacherID);
+    if (!teacherFound) {
+        throw new Error("Teacher not found");
+    }
+    //Check if teacher is withdrawn
+    if (teacherFound.isWitdrawn) {
+        throw new Error("Action denied, teacher is withdraw");
+    }
+    //assign a program
+    if (program) {
+        const programExists = await Program.findOne({ name: program });
+        if (!programExists) {
+            throw new Error("Action denied, Program doesn't exist");
+        }
+        updates.program = programExists._id;
+    }
+
+    //assign Class level
+    if (classLevel) {
+        const classLevelExists = await ClassLevel.findOne({name:classLevel})
+        if(!classLevelExists){
+            throw new Error("Action denied, Class Level doesn't exist");
+        }
+        updates.classLevel = classLevelExists._id;
+    }
+
+    //assign Academic year
+    if (academicYear) {
+        const academicYearExists = await AcademicYear.findOne({name:academicYear})
+        if(!academicYearExists){
+            throw new Error("Action denied, Academic Year doesn't exist");
+        }
+        updates.academicYear = academicYearExists._id;
+    }
+
+    //assign subject
+    if (subject) {
+        const subjectExists = await Subject.findOne({name:subject});
+        if (!subjectExists){
+            throw new Error("Action denied, Subject doesn't exist");
+        }
+        const teacherSubjectExists = teacherFound.subject.some(
+            (existingSubject) => existingSubject.toString() === subjectExists._id.toString()
+        );
+
+        if (teacherSubjectExists) {
+            throw new Error("Subject already assigned to this teacher");
+        } else {
+            teacherFound.subject.push(subjectExists._id);
+            updates.subject = teacherFound.subject.slice();
+        }
+    }
+
+    const updatedTeacher = await Teacher.findOneAndUpdate(
+        { _id: teacherFound._id },
+        updates,
+        { new: true }
+    );
+    console.log(updates);
+    res.status(200).json({
+        status: "success",
+        data: updatedTeacher,
+        message: "Teacher updated successfully",
+    });
+
 });
