@@ -59,7 +59,6 @@ const teacherSchema = new mongoose.Schema(
         subject: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Subject",
-            // required: true,
         }],
         applicationStatus: {
             type: String,
@@ -68,14 +67,16 @@ const teacherSchema = new mongoose.Schema(
         },
 
         program: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Program"
         },
-        //A teacher can teach in more than one class level
         classLevel: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "ClassLevel"
         },
         academicYear: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "AcademicYear"
         },
         examsCreated: [
             {
@@ -89,7 +90,8 @@ const teacherSchema = new mongoose.Schema(
             // required: true,
         },
         academicTerm: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "AcademicTerm"
         },
     },
     {
