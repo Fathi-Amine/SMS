@@ -23,6 +23,7 @@ exports.createSubject = AsyncHandler(async (req, res) => {
         createdBy: req.user.id,
     });
 
+    programFound.subjects.push(subjectCreated._id);
     await programFound.save();
     res.status(201).json({
         status: "success",

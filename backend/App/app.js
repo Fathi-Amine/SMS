@@ -10,6 +10,7 @@ const academicTermRoutes = require("../Routes/School/academicTermRoutes");
 const classLevelRoutes = require("../Routes/School/classLevelRoutes");
 const programRoutes = require("../Routes/School/programRoutes");
 const subjectRoutes = require("../Routes/School/subjectRoutes");
+const yearGroupRoutes = require("../Routes/School/yearGroupRoutes");
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use('/api/v1/academic-terms', academicTermRoutes);
 app.use('/api/v1/class-levels', classLevelRoutes);
 app.use('/api/v1/programs', programRoutes);
 app.use('/api/v1/subjects', subjectRoutes);
+app.use('/api/v1/year-groups', yearGroupRoutes);
 app.use(notFoundError)
 app.use(errorHandlingMiddleware);
 
