@@ -4,17 +4,6 @@ const {Teacher} = require("../Models/Staff/Teacher");
 const {Student} = require("../Models/Academic/Student");
 const Token = require('../Models/Global/Token');
 
-const isLoggedIn = (req, res, next) => {
-    const isLogged = req.isAuthenticated;
-    if (isLogged) {
-        return next();
-    }else {
-        const error = new Error('You are not logged in');
-        error.status = "Unauthenticated";
-        error.statusCode = 401;
-        next(error);
-    }
-}
 
 const authMiddleware = async (req, res, next) => {
     const {refreshToken, accessToken} = req.signedCookies
@@ -36,7 +25,7 @@ const authMiddleware = async (req, res, next) => {
         if (payload.user.role === 'admin'){
             user = await Admin.findById(payload.user.id);
         }else if (payload.user.role === 'teacher'){
-            user = await Teacher.findById(payload.user._id);
+            user = await Teacher.findById(payload.user.id);
         }else if (payload.user.role === 'student'){
             user = await Student.findById(payload.user._id);
         }
@@ -60,8 +49,6 @@ const authMiddleware = async (req, res, next) => {
         next(error)
     }
 }
-// middleware exports
 module.exports = {
-    isLoggedIn,
     authMiddleware
 };
