@@ -12,6 +12,7 @@ const programRoutes = require("../Routes/School/programRoutes");
 const subjectRoutes = require("../Routes/School/subjectRoutes");
 const yearGroupRoutes = require("../Routes/School/yearGroupRoutes");
 const teacherRoutes = require("../Routes/Staff/teacherRoutes");
+const examRoutes = require("../Routes/School/examRoutes");
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use('/api/v1/programs', programRoutes);
 app.use('/api/v1/subjects', subjectRoutes);
 app.use('/api/v1/year-groups', yearGroupRoutes);
 app.use('/api/v1/teachers', teacherRoutes);
+app.use('/api/v1/exams', examRoutes);
 app.use(notFoundError)
 app.use(errorHandlingMiddleware);
 
