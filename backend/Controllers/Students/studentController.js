@@ -3,6 +3,8 @@ const {genPassword, validPassword, attachCookieToResponse} = require("../../Util
 const Student = require("../../Models/Academic/Student");
 const Token = require("../../Models/Global/Token");
 const crypto = require("crypto");
+const AysncHandler = require("express-async-handler");
+const Teacher = require("../../Models/Staff/Teacher");
 
 
 exports.adminRegisterStudent = AsyncHandler(async (req, res) => {
@@ -78,4 +80,100 @@ exports.studentLogin = AsyncHandler(async (req, res) => {
             message: 'Invalid email or password'
         });
     }
+});
+
+exports.getStudentProfile = AysncHandler(async (req, res) => {
+    const student = await Student.findById(req.user?.id).select(
+        "-hash -salt -createdAt -updatedAt"
+    );
+    if (!student) {
+        throw new Error("Student not found");
+    }
+    res.status(200).json({
+        status: "success",
+        data: student,
+        message: "Student Profile fetched  successfully",
+    });
+});
+
+exports.adminGettingAllStudents = AsyncHandler(async (req, res) => {
+    const students = await Student.find().select("-hash -salt -token");
+    res.status(200).json({
+        status: "success",
+        message: "Teachers fetched successfully",
+        data: students,
+    });
+});
+
+exports.getStudentByAdmin = AysncHandler(async (req, res) => {
+    const studentId = req.params.studentId;
+    //find the teacher
+    const student = await Student.findById(studentId);
+    if (!student) {
+        throw new Error("Student not found");
+    }
+    res.status(200).json({
+        status: "success",
+        message: "Teacher fetched successfully",
+        data: student,
+    });
+});
+
+exports.studentUpdateProfile = AsyncHandler(async (req, res) => {
+    const {name, email, password} = req.body;
+    const {hash, salt} = genPassword(password);
+    if (email !== req.user.email) {
+        const emailExists = await Student.findOne({email});
+        if (emailExists) {
+            const error = new Error('Email already exists');
+            error.statusCode = 409;
+            throw error;
+        }
+    }
+    const updatedStudent = await Student.findByIdAndUpdate(req.user.id, {
+        name,
+        email,
+        hash,
+        salt
+    }, {new: true});
+    return res.status(200).json({
+        status: 'success',
+        data: updatedStudent,
+        message: 'Student updated successfully'
+    });
+});
+
+exports.adminUpdateStudent = AysncHandler(async (req, res) => {
+    const { classLevels, academicYear, program, prefectName } =
+        req.body;
+
+    //find the student by id
+    const studentFound = await Student.findById(req.params.studentId);
+    if (!studentFound) {
+        throw new Error("Student not found");
+    }
+
+    //update
+    const studentUpdated = await Student.findByIdAndUpdate(
+        req.params.studentId,
+        {
+            $set: {
+                academicYear,
+                program,
+                prefectName,
+            },
+            $addToSet: {
+                classLevels,
+            },
+        },
+        {
+            new: true,
+        }
+    );
+    //send response
+    res.status(200).json({
+        status: "success",
+        data: studentUpdated,
+        message: "Student updated successfully",
+    });
 });
