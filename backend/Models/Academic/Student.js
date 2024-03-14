@@ -9,9 +9,15 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        password: {
+        hash: {
             type: String,
-            required: true,
+        },
+        salt: {
+            type: String,
+        },
+        token: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Token'
         },
         studentId: {
             type: String,

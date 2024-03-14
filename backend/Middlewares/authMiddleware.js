@@ -27,7 +27,7 @@ const authMiddleware = async (req, res, next) => {
         }else if (payload.user.role === 'teacher'){
             user = await Teacher.findById(payload.user.id);
         }else if (payload.user.role === 'student'){
-            user = await Student.findById(payload.user._id);
+            user = await Student.findById(payload.user.id);
         }
         const existingToken = await Token.findOne({
             _id: user.token,
