@@ -5,6 +5,8 @@ const Token = require("../../Models/Global/Token");
 const crypto = require("crypto");
 const AysncHandler = require("express-async-handler");
 const Teacher = require("../../Models/Staff/Teacher");
+const Exam = require("../../Models/Academic/Exam");
+const ExamResult = require("../../Models/Academic/ExamResults");
 
 
 exports.adminRegisterStudent = AsyncHandler(async (req, res) => {
@@ -175,5 +177,121 @@ exports.adminUpdateStudent = AysncHandler(async (req, res) => {
         status: "success",
         data: studentUpdated,
         message: "Student updated successfully",
+    });
+});
+
+exports.writeExam = AysncHandler(async (req, res) => {
+    //get student
+    const studentFound = await Student.findById(req.user.id);
+    if (!studentFound) {
+        throw new Error("Student not found");
+    }
+    //Get exam
+    const examFound = await Exam.findById(req.params.examID)
+        .populate("questions")
+        /*.populate("academicTerm");*/
+
+    if (!examFound) {
+        throw new Error("Exam not found");
+    }
+    //get questions
+    const questions = examFound?.questions;
+    //get students questions
+    const studentAnswers = req.body.answers;
+
+    //check if student answered all questions
+    if (studentAnswers.length !== questions.length) {
+        throw new Error("You have not answered all the questions");
+    }
+
+    // //check if student has already taken the exams
+    const studentFoundInResults = await ExamResult.findOne({
+        student: studentFound?._id,
+    });
+    if (studentFoundInResults) {
+        throw new Error("You have already written this exam");
+    }
+
+    //check if student is suspende/withdrawn
+    if (studentFound.isWithdrawn || studentFound.isSuspended) {
+        throw new Error("You are suspended/withdrawn, you can't take this exam");
+    }
+
+    //Build report object
+    let correctAnswers = 0;
+    let wrongAnswers = 0;
+    let status = "";
+    let grade = 0;
+    let remarks = "";
+    let score = 0;
+    let answeredQuestions = [];
+
+    //check for answers
+    for (let i = 0; i < questions.length; i++) {
+        //find the question
+        const question = questions[i];
+        //check if the answer is correct
+        if (question.correctAnswer === studentAnswers[i]) {
+            correctAnswers++;
+            score++;
+            question.isCorrect = true;
+        } else {
+            wrongAnswers++;
+        }
+    }
+    //calculate reports
+    totalQuestions = questions.length;
+    grade = (correctAnswers / questions.length) * 100;
+    answeredQuestions = questions.map(question => {
+        return {
+            question: question.question,
+            correctAnswer: question.correctAnswer,
+            isCorrect: question.isCorrect,
+        };
+    });
+
+    //calculate status
+    if (grade >= 50) {
+        status = "Pass";
+    } else {
+        status = "Fail";
+    }
+
+    //Remarks
+    if (grade >= 80) {
+        remarks = "Excellent";
+    } else if (grade >= 70) {
+        remarks = "Very Good";
+    } else if (grade >= 60) {
+        remarks = "Good";
+    } else if (grade >= 50) {
+        remarks = "Fair";
+    } else {
+        remarks = "Poor";
+    }
+
+    //Generate Exam results
+    const examResults = await ExamResult.create({
+        studentID: studentFound?.studentId,
+        exam: examFound?._id,
+        grade,
+        score,
+        status,
+        remarks,
+        classLevel: examFound?.classLevel,
+        academicTerm: examFound?.academicTerm,
+        academicYear: examFound?.academicYear,
+        answeredQuestions: answeredQuestions,
+    });
+    // //push the results into
+    studentFound.examResults.push(examResults?._id);
+    // //save
+    await studentFound.save();
+
+
+
+    res.status(200).json({
+        status: "success",
+        data: "You have submitted your exam. Check later for the results",
     });
 });

@@ -3,11 +3,21 @@ const studentRoutes = express.Router();
 const {authMiddleware} = require('../../Middlewares/authMiddleware');
 const isAdminMiddleware = require('../../Middlewares/isAdminMiddleware');
 const isTeacherMiddleware = require('../../Middlewares/isTeacherMiddleware');
-const {adminRegisterStudent, studentLogin, getStudentProfile, adminGettingAllStudents, getStudentByAdmin, studentUpdateProfile, adminUpdateStudent} = require("../../Controllers/Students/studentController");
+const {
+    adminRegisterStudent,
+    studentLogin,
+    getStudentProfile,
+    adminGettingAllStudents,
+    getStudentByAdmin,
+    studentUpdateProfile,
+    adminUpdateStudent,
+    writeExam
+} = require("../../Controllers/Students/studentController");
 const isStudentMiddleware = require("../../Middlewares/isStudentMiddleware");
 
 studentRoutes.post('/register', authMiddleware, isAdminMiddleware , adminRegisterStudent);
 studentRoutes.post('/login', studentLogin);
+studentRoutes.post("/exam/:examID/write", authMiddleware, isStudentMiddleware,writeExam);
 studentRoutes.get('/profile', authMiddleware,isStudentMiddleware, getStudentProfile);
 studentRoutes.get('/all', authMiddleware, isAdminMiddleware, adminGettingAllStudents);
 studentRoutes.get("/:studentId/admin", authMiddleware, isAdminMiddleware, getStudentByAdmin);
