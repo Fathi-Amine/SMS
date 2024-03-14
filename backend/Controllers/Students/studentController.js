@@ -189,7 +189,7 @@ exports.writeExam = AysncHandler(async (req, res) => {
     //Get exam
     const examFound = await Exam.findById(req.params.examID)
         .populate("questions")
-        /*.populate("academicTerm");*/
+        .populate("academicTerm");
 
     if (!examFound) {
         throw new Error("Exam not found");
@@ -288,6 +288,50 @@ exports.writeExam = AysncHandler(async (req, res) => {
     // //save
     await studentFound.save();
 
+    //Promoting
+    //promote student to level 200
+    if (
+        examFound.academicTerm.name === "3rd term" &&
+        status === "Pass" &&
+        studentFound?.currentClassLevel === "Level 100"
+    ) {
+        studentFound.classLevels.push("Level 200");
+        studentFound.currentClassLevel = "Level 200";
+        await studentFound.save();
+    }
+
+    //promote student to level 300
+    if (
+        examFound.academicTerm.name === "3rd term" &&
+        status === "Pass" &&
+        studentFound?.currentClassLevel === "Level 200"
+    ) {
+        studentFound.classLevels.push("Level 300");
+        studentFound.currentClassLevel = "Level 300";
+        await studentFound.save();
+    }
+
+    //promote student to level 400
+    if (
+        examFound.academicTerm.name === "3rd term" &&
+        status === "Pass" &&
+        studentFound?.currentClassLevel === "Level 300"
+    ) {
+        studentFound.classLevels.push("Level 400");
+        studentFound.currentClassLevel = "Level 400";
+        await studentFound.save();
+    }
+
+    //promote student to graduate
+    if (
+        examFound.academicTerm.name === "3rd term" &&
+        status === "Pass" &&
+        studentFound?.currentClassLevel === "Level 400"
+    ) {
+        studentFound.isGraduated = true;
+        studentFound.yearGraduated = new Date();
+        await studentFound.save();
+    }
 
 
     res.status(200).json({
