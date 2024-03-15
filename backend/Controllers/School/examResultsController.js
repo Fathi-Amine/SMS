@@ -5,7 +5,7 @@ const Student = require("../../Models/Academic/Student");
 
 exports.checkExamResults = AsyncHandler(async (req, res) => {
     //find the student
-    const studentFound = await Student.findById(req.userAuth?._id);
+    const studentFound = await Student.findById(req.user.id);
     if (!studentFound) {
         throw new Error("No Student Found");
     }
@@ -36,7 +36,7 @@ exports.checkExamResults = AsyncHandler(async (req, res) => {
 });
 
 
-exports.getAllExamResults = AysncHandler(async (req, res) => {
+exports.getAllExamResults = AsyncHandler(async (req, res) => {
     const results = await ExamResult.find().select("exam").populate("exam");
     res.status(200).json({
         status: "success",
@@ -45,7 +45,7 @@ exports.getAllExamResults = AysncHandler(async (req, res) => {
     });
 });
 
-exports.adminToggleExamResult = AysncHandler(async (req, res) => {
+exports.adminToggleExamResult = AsyncHandler(async (req, res) => {
     //find the exam Results
     const examResult = await ExamResult.findById(req.params.id);
     if (!examResult) {

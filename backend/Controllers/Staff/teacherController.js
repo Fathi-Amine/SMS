@@ -13,6 +13,12 @@ const Subject = require("../../Models/Academic/Subject");
 
 exports.adminRegisterTeacher = AysncHandler(async (req, res) => {
     const { name, email, password } = req.body;
+
+    const adminFound = await Admin.findById(req.user.id);
+
+    if (!adminFound) {
+        throw new Error("Admin not found");
+    }
     //check if teacher already exists
     const teacher = await Teacher.findOne({ email });
     if (teacher) {
@@ -27,6 +33,9 @@ exports.adminRegisterTeacher = AysncHandler(async (req, res) => {
         hash,
         salt
     });
+
+    adminFound.teachers.push(teacherCreated?._id);
+    await adminFound.save();
     res.status(201).json({
         status: "success",
         message: "Teacher registered successfully",
