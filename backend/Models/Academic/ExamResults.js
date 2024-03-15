@@ -5,9 +5,8 @@ const { Schema } = mongoose;
 //exam result schema
 const examResultSchema = new Schema(
     {
-        student: {
-            type: Schema.Types.ObjectId,
-            ref: "Student",
+        studentID: {
+            type: String,
             required: true,
         },
         exam: {
@@ -32,8 +31,8 @@ const examResultSchema = new Schema(
         status: {
             type: String,
             required: true,
-            enum: ["failed", "passed"],
-            default: "failed",
+            enum: ["Pass", "Fail"],
+            default: "Fail",
         },
         //Excellent/Good/Poor
         remarks: {
@@ -42,10 +41,10 @@ const examResultSchema = new Schema(
             enum: ["Excellent", "Good", "Poor"],
             default: "Poor",
         },
-        position: {
+        /*position: {
             type: Number,
             required: true,
-        },
+        },*/
 
         subject: {
             type: mongoose.Schema.Types.ObjectId,
