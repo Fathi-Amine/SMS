@@ -7,10 +7,15 @@ const AysncHandler = require("express-async-handler");
 const Teacher = require("../../Models/Staff/Teacher");
 const Exam = require("../../Models/Academic/Exam");
 const ExamResult = require("../../Models/Academic/ExamResults");
+const Admin = require("../../Models/Staff/Admin");
 
 
 exports.adminRegisterStudent = AsyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
+    const adminFound = await Admin.findById(req.user.id);
+    if (!adminFound) {
+        throw new Error("Admin not found");
+    }
     //check if teacher already exists
     const student = await Student.findOne({ email });
     if (student) {
@@ -25,6 +30,9 @@ exports.adminRegisterStudent = AsyncHandler(async (req, res) => {
         hash,
         salt
     });
+
+    adminFound.students.push(studentCreated?._id);
+    await adminFound.save();
     res.status(201).json({
         status: "success",
         message: "Student registered successfully",
