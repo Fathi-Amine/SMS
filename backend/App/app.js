@@ -16,10 +16,12 @@ const examRoutes = require("../Routes/School/examRoutes");
 const studentRoutes = require("../Routes/School/studentRoutes");
 const questionRoutes = require("../Routes/School/questionRoutes");
 const examResultRoutes = require("../Routes/School/examResultsRoutes");
+const cors = require('cors');
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cors());
 app.use('/api/v1/admins', adminRoutes);
 app.use('/api/v1/academic-years', academicYearRoutes);
 app.use('/api/v1/academic-terms', academicTermRoutes);
