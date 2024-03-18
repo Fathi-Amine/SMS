@@ -2,6 +2,7 @@ import {Header} from "../components/index.jsx";
 import {useState} from "react";
 import {useRegisterTeacherMutation} from "../redux/slices/teacherSlice.js";
 import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
+import {useAddAcademicTermMutation} from "../redux/slices/academicTermSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -35,6 +36,8 @@ const Kanban = () => {
 
     const [addAcademicYear, {isLoading: isLoadingYear, isError: isErrorYear, isSuccess: isSuccessYear}] = useAddAcademicYearMutation();
 
+    const [addAcademicTerm, {isLoading: isLoadingTerm, isError: isErrorTerm, isSuccess: isSuccessTerm}] = useAddAcademicTermMutation();
+
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
         // use mutation to register a teacher
@@ -60,9 +63,15 @@ const Kanban = () => {
         }
     }
 
-    const handleTermSubmit = (e) => {
+    const handleTermSubmit = async (e) => {
         e.preventDefault();
-        console.log(termName, termDescription);
+        try {
+            const res = await addAcademicTerm({name:termName, description:termDescription}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const handleClassLevelSubmit = (e) => {
@@ -171,19 +180,28 @@ const Kanban = () => {
 
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Academic Term"}/>
-                <form action="">
+                <form
+                    onSubmit={handleTermSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="termName" className={"block ml-2"}>Name</label>
                             <input type="text" id="termName"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={termName}
+                                   onChange={(e)=>setTermName(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div>
                         {/*add text area and style it  */}
                         <label htmlFor="termDescription" className={"block ml-2"}>Description</label>
                         <textarea id="termDescription" rows={4}
-                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}/>
+                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}
+                                  value={termDescription}
+                                  onChange={(e)=>setTermDescription(e.target.value)}
+                        />
+
                     </div>
                     <div className={"flex justify-end mt-4"}>
                         <button type={"submit"} className={"bg-blue-500 text-white rounded-lg p-2 px-4"}>Add Academic
