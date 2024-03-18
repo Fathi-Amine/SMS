@@ -1,11 +1,12 @@
 import {Header} from "../components/index.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRegisterTeacherMutation} from "../redux/slices/teacherSlice.js";
 import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
-import {useAddAcademicTermMutation} from "../redux/slices/academicTermSlice.js";
+import {useAddAcademicTermMutation, useGetAllAcademicTermsQuery} from "../redux/slices/academicTermSlice.js";
 import {useAddClassLevelMutation} from "../redux/slices/classLevelSlice.js";
-import {useAddProgramMutation} from "../redux/slices/programApiSlice.js";
+import {useAddProgramMutation, useGetAllProgramsQuery} from "../redux/slices/programApiSlice.js";
 import {useAddStudentMutation} from "../redux/slices/studentApiSlice.js";
+import {useAddSubjectMutation} from "../redux/slices/subjectApiSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -35,6 +36,12 @@ const Kanban = () => {
     const [studentEmail, setStudentEmail] = useState("");
     const [studentPassword, setStudentPassword] = useState("");
 
+    const [academicTermsdata, setAcademicTerms] = useState([]);
+
+    const [programs, setPrograms] = useState([]);
+    const [programID, setProgramID] = useState("");
+    const [academicTermId, setAcademicTermID] = useState("");
+
     const [registerTeacher,{ isLoading : isLoadingTeacher, isError: isErrorTeacher, isSuccess: isSuccessTeacher}] = useRegisterTeacherMutation();
 
     const [addAcademicYear, {isLoading: isLoadingYear, isError: isErrorYear, isSuccess: isSuccessYear}] = useAddAcademicYearMutation();
@@ -45,11 +52,15 @@ const Kanban = () => {
 
     const [addProgram, {isLoading: isLoadingProgram, isError: isErrorProgram, isSuccess: isSuccessProgram}] = useAddProgramMutation();
 
-/*    const [addSubject, {isLoading: isLoadingSubject, isError: isErrorSubject, isSuccess: isSuccessSubject}] = useAddSubjectMutation();
-
+    const [addSubject, {isLoading: isLoadingSubject, isError: isErrorSubject, isSuccess: isSuccessSubject}] = useAddSubjectMutation();
+/*
     const [addYearGroup, {isLoading: isLoadingYearGroup, isError: isErrorYearGroup, isSuccess: isSuccessYearGroup}] = useAddYearGroupMutation();*/
 
     const [addStudent, {isLoading: isLoadingStudent, isError: isErrorStudent, isSuccess: isSuccessStudent}] = useAddStudentMutation();
+
+    const {data: classes ,isLoading: isLoadingPrograms, isError: isErrorPrograms, isSuccess: isSuccessPrograms} = useGetAllProgramsQuery();
+
+    const {data: academicTerms ,isLoading: isLoadingAcademicTerms, isError: isErrorAcademicTerms, isSuccess: isSuccessAcademicTerms} = useGetAllAcademicTermsQuery();
 
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
@@ -111,9 +122,15 @@ const Kanban = () => {
         }
     }
 
-    const handleSubjectSubmit = (e) => {
+    const handleSubjectSubmit = async (e) => {
         e.preventDefault();
-        console.log(subjectName, subjectDescription);
+        try {
+            const res = await addSubject({name:subjectName, description:subjectDescription, academicTerm:academicTermId, programID}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const handleYearGroupSubmit = (e) => {
@@ -131,6 +148,20 @@ const Kanban = () => {
             console.log(e)
         }
     }
+
+    useEffect(() => {
+        if (isSuccessPrograms) {
+            setPrograms(classes);
+            console.log(classes)
+        }
+    }, [classes, isSuccessPrograms]);
+
+    useEffect(() => {
+        if (isSuccessAcademicTerms) {
+            setAcademicTerms(academicTerms);
+            console.log(academicTerms)
+        }
+    },[academicTerms, isSuccessAcademicTerms]);
 
     return (
         <>
@@ -305,28 +336,58 @@ const Kanban = () => {
             </div>
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Subject"}/>
-                <form action="">
+                <form
+                    onSubmit={handleSubjectSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="subjectName" className={"block ml-2"}>Name</label>
                             <input type="text" id="subjectName"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={subjectName}
+                                   onChange={(e)=>setSubjectName(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className={"flex items-center gap-2 flex-wrap"}>
+                        <div className={"flex-1"}>
+                            <label htmlFor="academicTermSelect" className={"block ml-2"}>Academic Term</label>
+                            <select id="academicTermSelect"
+                                    className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                    value={academicTermId}
+                                    onChange={(e)=>setAcademicTermID(e.target.value)}
+                            >
+                                <option value={""}>Select an academic term</option>
+                                {academicTerms?.data?.map((term, index) => (
+                                    <option key={index} value={term._id}>{term.name}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className={"flex-1"}>
-                            <label htmlFor="subjectSelect" className={"block ml-2"}>Academic Term</label>
-                            <select id="subjectSelect"
-                                    className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}>
-                                <option>AMS</option>
+                            <label htmlFor="programSelect" className={"block ml-2"}>Academic Term</label>
+                            <select id="programSelect"
+                                    className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                    value={programID}
+                                    onChange={(e)=>setProgramID(e.target.value)}
+                            >
+                                <option value={""}>Select a program</option>
+                                {programs?.data?.map((program, index) => (
+                                    <option key={index} value={program._id}>{program.name}</option>
+                                ))}
                             </select>
                         </div>
 
                     </div>
-                    <div className={"mt-2"}>
+                    <div className={"flex-1"}>
                         {/*add text area and style it  */}
                         <label htmlFor="subjectDescription" className={"block ml-2"}>Description</label>
                         <textarea id="subjectDescription" rows={4}
-                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}/>
+                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}
+                                  value={subjectDescription}
+                                  onChange={(e)=>setSubjectDescription(e.target.value)}
+                        />
                     </div>
+
                     <div className={"flex justify-end mt-4"}>
                         <button type={"submit"} className={"bg-blue-500 text-white rounded-lg p-2 px-4"}>Add Program
                         </button>

@@ -27,7 +27,7 @@ exports.createSubject = AsyncHandler(async (req, res) => {
     await programFound.save();
     res.status(201).json({
         status: "success",
-        message: "Program created successfully",
+        message: "Subject created successfully",
         data: subjectCreated,
     });
 });
