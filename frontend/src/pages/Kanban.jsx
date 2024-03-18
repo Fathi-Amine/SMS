@@ -3,6 +3,7 @@ import {useState} from "react";
 import {useRegisterTeacherMutation} from "../redux/slices/teacherSlice.js";
 import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
 import {useAddAcademicTermMutation} from "../redux/slices/academicTermSlice.js";
+import {useAddClassLevelMutation} from "../redux/slices/classLevelSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -37,6 +38,8 @@ const Kanban = () => {
     const [addAcademicYear, {isLoading: isLoadingYear, isError: isErrorYear, isSuccess: isSuccessYear}] = useAddAcademicYearMutation();
 
     const [addAcademicTerm, {isLoading: isLoadingTerm, isError: isErrorTerm, isSuccess: isSuccessTerm}] = useAddAcademicTermMutation();
+
+    const [addClassLevel, {isLoading: isLoadingClassLevel, isError: isErrorClassLevel, isSuccess: isSuccessClassLevel}] = useAddClassLevelMutation();
 
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
@@ -74,9 +77,16 @@ const Kanban = () => {
         }
     }
 
-    const handleClassLevelSubmit = (e) => {
+    const handleClassLevelSubmit = async (e) => {
         e.preventDefault();
-        console.log(classLevel, clDescription);
+
+        try {
+            const res = await addClassLevel({name:classLevel, description:clDescription}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const handleProgramSubmit = (e) => {
@@ -212,19 +222,27 @@ const Kanban = () => {
             </div>
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Class Level"}/>
-                <form action="">
+                <form
+                    onSubmit={handleClassLevelSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="classLevel" className={"block ml-2"}>Name</label>
                             <input type="text" id="classLevel"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={classLevel}
+                                   onChange={(e)=>setClassLevel(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div>
                         {/*add text area and style it  */}
                         <label htmlFor="clDescription" className={"block ml-2"}>Description</label>
                         <textarea id="clDescription" rows={4}
-                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}/>
+                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}
+                                  value={clDescription}
+                                  onChange={(e)=>setClDescription(e.target.value)}
+                        />
                     </div>
                     <div className={"flex justify-end mt-4"}>
                         <button type={"submit"} className={"bg-blue-500 text-white rounded-lg p-2 px-4"}>Add Class Level
@@ -234,19 +252,27 @@ const Kanban = () => {
             </div>
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Program"}/>
-                <form action="">
+                <form
+                    onSubmit={handleProgramSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="programName" className={"block ml-2"}>Name</label>
                             <input type="text" id="programName"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={programName}
+                                   onChange={(e)=>setProgramName(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div>
                         {/*add text area and style it  */}
                         <label htmlFor="progDescription" className={"block ml-2"}>Description</label>
                         <textarea id="progDescription" rows={4}
-                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}/>
+                                  className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}
+                                  value={progDescription}
+                                  onChange={(e)=>setProgDescription(e.target.value)}
+                        />
                     </div>
                     <div className={"flex justify-end mt-4"}>
                         <button type={"submit"} className={"bg-blue-500 text-white rounded-lg p-2 px-4"}>Add Program
