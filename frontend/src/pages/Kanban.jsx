@@ -1,6 +1,7 @@
 import {Header} from "../components/index.jsx";
 import {useState} from "react";
 import {useRegisterTeacherMutation} from "../redux/slices/teacherSlice.js";
+import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -30,7 +31,9 @@ const Kanban = () => {
     const [studentEmail, setStudentEmail] = useState("");
     const [studentPassword, setStudentPassword] = useState("");
 
-    const [registerTeacher,{ isLoading, isError, isSuccess}] = useRegisterTeacherMutation();
+    const [registerTeacher,{ isLoading : isLoadingTeacher, isError: isErrorTeacher, isSuccess: isSuccessTeacher}] = useRegisterTeacherMutation();
+
+    const [addAcademicYear, {isLoading: isLoadingYear, isError: isErrorYear, isSuccess: isSuccessYear}] = useAddAcademicYearMutation();
 
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
@@ -45,9 +48,16 @@ const Kanban = () => {
         }
     }
 
-    const handleAcademicYearSubmit = (e) => {
+    const handleAcademicYearSubmit = async(e) => {
         e.preventDefault();
-        console.log(academicYearName, ayFrom, ayTo);
+        // use mutation to add an academic year
+        try {
+            const res = await addAcademicYear({name:academicYearName, fromYear:ayFrom, toYear:ayTo}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const handleTermSubmit = (e) => {
@@ -121,7 +131,9 @@ const Kanban = () => {
             </div>
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Academic Year"}/>
-                <form action="">
+                <form
+                    onSubmit={handleAcademicYearSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="academicYearName" className={"block ml-2"}>Name</label>
