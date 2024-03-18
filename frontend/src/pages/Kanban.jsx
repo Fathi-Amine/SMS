@@ -4,6 +4,7 @@ import {useRegisterTeacherMutation} from "../redux/slices/teacherSlice.js";
 import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
 import {useAddAcademicTermMutation} from "../redux/slices/academicTermSlice.js";
 import {useAddClassLevelMutation} from "../redux/slices/classLevelSlice.js";
+import {useAddProgramMutation} from "../redux/slices/programApiSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -40,6 +41,8 @@ const Kanban = () => {
     const [addAcademicTerm, {isLoading: isLoadingTerm, isError: isErrorTerm, isSuccess: isSuccessTerm}] = useAddAcademicTermMutation();
 
     const [addClassLevel, {isLoading: isLoadingClassLevel, isError: isErrorClassLevel, isSuccess: isSuccessClassLevel}] = useAddClassLevelMutation();
+
+    const [addProgram, {isLoading: isLoadingProgram, isError: isErrorProgram, isSuccess: isSuccessProgram}] = useAddProgramMutation();
 
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
@@ -89,9 +92,16 @@ const Kanban = () => {
         }
     }
 
-    const handleProgramSubmit = (e) => {
+    const handleProgramSubmit = async (e) => {
         e.preventDefault();
-        console.log(programName, progDescription);
+
+        try {
+            const res = await addProgram({name: programName, description: progDescription}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const handleSubjectSubmit = (e) => {
