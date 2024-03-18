@@ -5,6 +5,7 @@ import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
 import {useAddAcademicTermMutation} from "../redux/slices/academicTermSlice.js";
 import {useAddClassLevelMutation} from "../redux/slices/classLevelSlice.js";
 import {useAddProgramMutation} from "../redux/slices/programApiSlice.js";
+import {useAddStudentMutation} from "../redux/slices/studentApiSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -43,6 +44,12 @@ const Kanban = () => {
     const [addClassLevel, {isLoading: isLoadingClassLevel, isError: isErrorClassLevel, isSuccess: isSuccessClassLevel}] = useAddClassLevelMutation();
 
     const [addProgram, {isLoading: isLoadingProgram, isError: isErrorProgram, isSuccess: isSuccessProgram}] = useAddProgramMutation();
+
+/*    const [addSubject, {isLoading: isLoadingSubject, isError: isErrorSubject, isSuccess: isSuccessSubject}] = useAddSubjectMutation();
+
+    const [addYearGroup, {isLoading: isLoadingYearGroup, isError: isErrorYearGroup, isSuccess: isSuccessYearGroup}] = useAddYearGroupMutation();*/
+
+    const [addStudent, {isLoading: isLoadingStudent, isError: isErrorStudent, isSuccess: isSuccessStudent}] = useAddStudentMutation();
 
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
@@ -114,9 +121,15 @@ const Kanban = () => {
         console.log(yearGroupName, yearGroupDescription);
     }
 
-    const handleStudentSubmit = (e) => {
+    const handleStudentSubmit = async (e) => {
         e.preventDefault();
-        console.log(studentName, studentEmail, studentPassword);
+        try {
+            const res = await addStudent({name:studentName, email:studentEmail, password:studentPassword}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     return (
@@ -345,26 +358,37 @@ const Kanban = () => {
             </div>
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Student"}/>
-                <form action="">
+                <form
+                    onSubmit={handleStudentSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="studentName" className={"block ml-2"}>Name</label>
                             <input type="text" id="studentName"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={studentName}
+                                   onChange={(e)=>setStudentName(e.target.value)}
+                            />
                         </div>
                         <div className={" flex-1"}>
                             <label htmlFor="studentEmail" className={"block ml-2"}>Email</label>
                             <input type="text" id="studentEmail"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={studentEmail}
+                                   onChange={(e)=>setStudentEmail(e.target.value)}
+                            />
                         </div>
                         <div className={" flex-1"}>
                             <label htmlFor="studentPassword" className={"block ml-2"}>Password</label>
                             <input type="password" id="studentPassword"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border"}
+                                   value={studentPassword}
+                                   onChange={(e)=>setStudentPassword(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div className={"flex justify-end mt-4"}>
-                        <button type={"submit"} className={"bg-blue-500 text-white rounded-lg p-2 px-4"}>Add Teacher
+                        <button type={"submit"} className={"bg-blue-500 text-white rounded-lg p-2 px-4"}>Add Student
                         </button>
                     </div>
                 </form>
