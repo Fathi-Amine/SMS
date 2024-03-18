@@ -1,10 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BsCurrencyDollar} from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
 import {Stacked, Pie, Button, SparkLine} from "../components/index.jsx";
 import { earningData, SparklineAreaData, ecomPieChartData } from "../data/dummy.jsx";
+import {useDispatch} from "react-redux";
+import {useGetAllAdminsQuery} from "../redux/slices/adminApiSlice.js";
 
 const Ecommerce = () => {
+    const [admins, setAdmins] = useState([])
+
+    const {data, isLoading, isError, error } = useGetAllAdminsQuery()
+    const dispatch = useDispatch()
+
+    // get all admins
+    useEffect(()=>{
+        if(data){
+            setAdmins(data)
+            console.log(admins)
+        }
+
+    },[data])
     return (
         <div className={'mt-12'}>
             <div className={"flex flex-wrap lg:flex-nowrap justify-center"}>

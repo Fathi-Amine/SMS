@@ -24,6 +24,12 @@ export const adminApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE'
             })
         }),
+        getAllAdmins:builder.query({
+            query:()=>({
+                url: `${USERS_URL}`,
+                method:'GET'
+            })
+        }),
         /*updateUser: builder.mutation({
             query:(data)=>({
                 url: `${USERS_URL}/users/updateUser`,
@@ -66,4 +72,4 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 
 
 
-export const {useLoginMutation, useLogoutMutation, useRegisterMutation, /*useUpdateUserMutation,useForgotPasswordMutation,useResetPasswordMutation,useVerifyEmailMutation, useGetAllUsersQuery*/} = adminApiSlice
+export const {useLoginMutation, useLogoutMutation, useRegisterMutation, useGetAllAdminsQuery /*useUpdateUserMutation,useForgotPasswordMutation,useResetPasswordMutation,useVerifyEmailMutation*/} = adminApiSlice
