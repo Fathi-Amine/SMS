@@ -1,12 +1,13 @@
 import {Header} from "../components/index.jsx";
 import {useEffect, useState} from "react";
 import {useRegisterTeacherMutation} from "../redux/slices/teacherSlice.js";
-import {useAddAcademicYearMutation} from "../redux/slices/academicYearSlice.js";
+import {useAddAcademicYearMutation, useGetAllAcademicYearsQuery} from "../redux/slices/academicYearSlice.js";
 import {useAddAcademicTermMutation, useGetAllAcademicTermsQuery} from "../redux/slices/academicTermSlice.js";
 import {useAddClassLevelMutation} from "../redux/slices/classLevelSlice.js";
 import {useAddProgramMutation, useGetAllProgramsQuery} from "../redux/slices/programApiSlice.js";
 import {useAddStudentMutation} from "../redux/slices/studentApiSlice.js";
 import {useAddSubjectMutation} from "../redux/slices/subjectApiSlice.js";
+import {useAddYearGroupMutation} from "../redux/slices/YearGroupApiSlice.js";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -39,8 +40,10 @@ const Kanban = () => {
     const [academicTermsdata, setAcademicTerms] = useState([]);
 
     const [programs, setPrograms] = useState([]);
+    const [academicYearsData, setAcademicYearsData] = useState([]);
     const [programID, setProgramID] = useState("");
     const [academicTermId, setAcademicTermID] = useState("");
+    const [academicYearId, setAcademicYearId] = useState("")
 
     const [registerTeacher,{ isLoading : isLoadingTeacher, isError: isErrorTeacher, isSuccess: isSuccessTeacher}] = useRegisterTeacherMutation();
 
@@ -53,14 +56,15 @@ const Kanban = () => {
     const [addProgram, {isLoading: isLoadingProgram, isError: isErrorProgram, isSuccess: isSuccessProgram}] = useAddProgramMutation();
 
     const [addSubject, {isLoading: isLoadingSubject, isError: isErrorSubject, isSuccess: isSuccessSubject}] = useAddSubjectMutation();
-/*
-    const [addYearGroup, {isLoading: isLoadingYearGroup, isError: isErrorYearGroup, isSuccess: isSuccessYearGroup}] = useAddYearGroupMutation();*/
+    const [addYearGroup, {isLoading: isLoadingYearGroup, isError: isErrorYearGroup, isSuccess: isSuccessYearGroup}] = useAddYearGroupMutation();
 
     const [addStudent, {isLoading: isLoadingStudent, isError: isErrorStudent, isSuccess: isSuccessStudent}] = useAddStudentMutation();
 
     const {data: classes ,isLoading: isLoadingPrograms, isError: isErrorPrograms, isSuccess: isSuccessPrograms} = useGetAllProgramsQuery();
 
     const {data: academicTerms ,isLoading: isLoadingAcademicTerms, isError: isErrorAcademicTerms, isSuccess: isSuccessAcademicTerms} = useGetAllAcademicTermsQuery();
+
+    const {data: academicYears ,isLoading: isLoadingAcademicYears, isError: isErrorAcademicYears, isSuccess: isSuccessAcademicYears} = useGetAllAcademicYearsQuery();
 
     const handleTeacherSubmit =async (e) => {
         e.preventDefault();
@@ -133,9 +137,15 @@ const Kanban = () => {
         }
     }
 
-    const handleYearGroupSubmit = (e) => {
+    const handleYearGroupSubmit = async (e) => {
         e.preventDefault();
-        console.log(yearGroupName, yearGroupDescription);
+        try {
+            const res = await addYearGroup({name:yearGroupName, academicYear:academicYearId}).unwrap();
+            const {message} = res;
+            console.log(res, message);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const handleStudentSubmit = async (e) => {
@@ -162,6 +172,13 @@ const Kanban = () => {
             console.log(academicTerms)
         }
     },[academicTerms, isSuccessAcademicTerms]);
+
+    useEffect(() => {
+        if (isSuccessAcademicYears) {
+            setAcademicYearsData(academicYears);
+            console.log(academicYears)
+        }
+    }, [academicYearsData, isSuccessAcademicYears]);
 
     return (
         <>
@@ -364,7 +381,7 @@ const Kanban = () => {
                             </select>
                         </div>
                         <div className={"flex-1"}>
-                            <label htmlFor="programSelect" className={"block ml-2"}>Academic Term</label>
+                            <label htmlFor="programSelect" className={"block ml-2"}>Programs</label>
                             <select id="programSelect"
                                     className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
                                     value={programID}
@@ -396,18 +413,29 @@ const Kanban = () => {
             </div>
             <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl"}>
                 <Header title={"Add Year group"}/>
-                <form action="">
+                <form
+                    onSubmit={handleYearGroupSubmit}
+                >
                     <div className={"flex items-center gap-2 flex-wrap"}>
                         <div className={"flex-1"}>
                             <label htmlFor="subjectName" className={"block ml-2"}>Name</label>
                             <input type="text" id="subjectName"
-                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}/>
+                                   className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                   value={yearGroupName}
+                                   onChange={(e)=>setYearGroupName(e.target.value)}
+                            />
                         </div>
                         <div className={"flex-1"}>
                             <label htmlFor="subjectSelect" className={"block ml-2"}>Academic Year</label>
                             <select id="subjectSelect"
-                                    className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}>
-                                <option>AMS</option>
+                                    className={"border-1 border-gray-300 rounded-lg p-2 outline-none w-full box-border  flex-1"}
+                                    value={academicYearId}
+                                    onChange={(e)=>setAcademicYearId(e.target.value)}
+                            >
+                                <option>Select an academic Year</option>
+                                {academicYearsData?.data?.map((year, index) => (
+                                    <option key={index} value={year._id}>{year.name}</option>
+                                ))}
                             </select>
                         </div>
                     </div>
