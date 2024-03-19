@@ -10,7 +10,7 @@ import {
     Admins,
     Area,
     Bar,
-    Calendar, ColorMapping,
+    Calendar, ClassLevels, ColorMapping,
     ColorPicker,
     Ecommerce,
     Editor,
@@ -65,6 +65,7 @@ const Dashboard = () => {
                                 <Route path={"/programs"} element={<Programs/>}/>
                                 <Route path={"/subjects"} element={<Subjects/>}/>
                                 <Route path={"/academic-terms"} element={<AcademicTerms/>}/>
+                                <Route path={"/class-levels"} element={<ClassLevels/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>
