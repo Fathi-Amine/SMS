@@ -17,7 +17,7 @@ import {
     Financial,
     Kanban,
     Line,
-    Pie, Programs, Pyramid, Stacked, Students, Subjects, Teachers
+    Pie, Programs, Pyramid, Stacked, Students, Subjects, Teachers, YearGroups
 } from "./index.jsx";
 import AcademicYear from "./academicYear.jsx";
 
@@ -69,6 +69,7 @@ const Dashboard = () => {
                                 <Route path={"/class-levels"} element={<ClassLevels/>}/>
                                 <Route path={"/academic-years"} element={<AcademicYear/>}/>
                                 <Route path={"/exams"} element={<Exams/>}/>
+                                <Route path={"/groups"} element={<YearGroups/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>

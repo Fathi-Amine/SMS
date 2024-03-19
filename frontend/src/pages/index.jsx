@@ -11,6 +11,7 @@ export { default as AcademicTerms } from './AcademicTerms.jsx';
 export { default as ClassLevels } from './classLevels.jsx';
 export { default as AcademicYears } from './academicYear.jsx';
 export { default as Exams } from './Exams.jsx';
+export { default as YearGroups } from './YearGroups.jsx';
 export { default as ColorPicker } from './ColorPicker';
 export { default as Calendar } from './Calender.jsx';
 export { default as Area } from './Charts/Area';

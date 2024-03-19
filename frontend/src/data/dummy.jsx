@@ -5,7 +5,7 @@ import {BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
 import {RiContactsLine, RiMiniProgramLine, RiStockLine} from 'react-icons/ri';
-import {MdOutlineAdminPanelSettings, MdOutlineSubject, MdOutlineSupervisorAccount} from 'react-icons/md';
+import {MdGroups2, MdOutlineAdminPanelSettings, MdOutlineSubject, MdOutlineSupervisorAccount} from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
 import {GiCalendarHalfYear, GiLevelEndFlag, GiLouvrePyramid} from 'react-icons/gi';
@@ -565,6 +565,10 @@ export const links = [
       {
         name: 'exams',
         icon: <PiExam />,
+      },
+      {
+        name: 'groups',
+        icon: <MdGroups2 />,
       },
     ],
   },
