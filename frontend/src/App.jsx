@@ -5,11 +5,9 @@ import {TooltipComponent} from "@syncfusion/ej2-react-popups";
 import {Navbar, Sidebar, Footer, ThemeSettings} from "./components/index.jsx";
 import {
     Ecommerce,
-    Employees,
     Calendar,
     Stacked,
     Pyramid,
-    Customers,
     Kanban,
     Area,
     Bar,

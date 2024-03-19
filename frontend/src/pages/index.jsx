@@ -2,9 +2,10 @@
 export { default as Ecommerce } from './Ecommerce';
 export { default as Kanban } from './Kanban';
 export { default as Teachers } from './Teachers.jsx';
-export { default as Employees } from './Employees';
+export { default as Students } from './Students.jsx';
 export { default as Editor } from './Editor';
-export { default as Customers } from './Customers';
+export { default as Admins } from './Admins.jsx';
+export { default as Programs } from './Programs.jsx';
 export { default as ColorPicker } from './ColorPicker';
 export { default as Calendar } from './Calender.jsx';
 export { default as Area } from './Charts/Area';

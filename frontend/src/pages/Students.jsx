@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {
     flexRender,
     MaterialReactTable,
@@ -16,24 +16,31 @@ import {
 } from "@tanstack/react-table";
 import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
+import {useGetAllStudentsQuery} from "../redux/slices/studentApiSlice.js";
+import {SiNginxproxymanager} from "react-icons/si";
 
-const Customers = () => {
+const Students = () => {
     const columnHelper = createColumnHelper()
 
     const columns = [
-        columnHelper.accessor("id", {
+        columnHelper.accessor("studentId", {
             cell: (info)=> <span>{info.getValue()}</span>,
             header: "ID"
 
         }),
-        columnHelper.accessor("first_name", {
+        columnHelper.accessor("name", {
             cell: (info)=> <span>{info.getValue()}</span>,
-            header: "First Name"
+            header: "Name"
 
         }),
-        columnHelper.accessor("last_name", {
-            cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Last Name"
+        columnHelper.accessor("dateAdmitted", {
+            cell: (info)=> {
+                const dateString = info.getValue();
+                const dateObject = new Date(dateString);
+                const formattedDate = dateObject.toLocaleDateString(); // Customize format if needed
+                return <span>{formattedDate}</span>;
+            },
+            header: "Ad Date"
 
         }),
         columnHelper.accessor("email", {
@@ -42,15 +49,30 @@ const Customers = () => {
 
         }),
         columnHelper.accessor("gender", {
-            cell: (info)=> <span>{info.getValue()}</span>,
+            cell: (info)=>
+                <button
+                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
+                >
+                <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
+                </button>,
             header: "Gender"
 
         }),
     ]
-    const [data] = useState(()=>[...people])
+    const [data] = useState(() => [...people])
+    const [students, setStudents] = useState([])
+
+    const {data: studentsData, isLoading, isError, isSuccess} = useGetAllStudentsQuery()
+
+    useEffect(() => {
+        if (isSuccess) {
+            setStudents(studentsData.data)
+        }
+        console.log(students)
+    }, [studentsData, isSuccess]);
     const [globalFilter, setGlobalFilter] = useState("")
     const table = useReactTable({
-        data,
+        data: students,
         columns,
         state: {
             globalFilter
@@ -61,7 +83,7 @@ const Customers = () => {
     })
     return (
         <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl overflow-auto"}>
-            <Header category={"Page"} title={"Customers"}/>
+            <Header category={"Page"} title={"Students"}/>
             <div className={"flex items-center justify-between"}>
                 <DebouncedInput
                     value={globalFilter ?? ""}
@@ -158,4 +180,4 @@ const Customers = () => {
     )
 };
 
-export default Customers;
+export default Students;

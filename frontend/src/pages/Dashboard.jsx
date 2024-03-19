@@ -6,17 +6,17 @@ import {FiSettings} from "react-icons/fi";
 import {Navbar, Sidebar} from "../components/index.jsx";
 import Home from "./Home.jsx";
 import {
+    Admins,
     Area,
     Bar,
     Calendar, ColorMapping,
     ColorPicker,
-    Customers,
     Ecommerce,
     Editor,
-    Employees, Financial,
+    Financial,
     Kanban,
     Line,
-    Pie, Pyramid, Stacked, Teachers
+    Pie, Programs, Pyramid, Stacked, Students, Teachers
 } from "./index.jsx";
 
 const Dashboard = () => {
@@ -59,8 +59,9 @@ const Dashboard = () => {
                                 <Route path={"/ecommerce"} element={<Ecommerce/>}/>
                                 {/*Pages*/}
                                 <Route path={"/teachers"} element={<Teachers/>}/>
-                                <Route path={"/employees"} element={<Employees/>}/>
-                                <Route path={"/customers"} element={<Customers/>}/>
+                                <Route path={"/students"} element={<Students/>}/>
+                                <Route path={"/admins"} element={<Admins/>}/>
+                                <Route path={"/programs"} element={<Programs/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>

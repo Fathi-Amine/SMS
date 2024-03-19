@@ -4,8 +4,8 @@ import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, Fi
 import {BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft, BsDatabaseAdd} from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
-import { RiContactsLine, RiStockLine } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import {RiContactsLine, RiMiniProgramLine, RiStockLine} from 'react-icons/ri';
+import {MdOutlineAdminPanelSettings, MdOutlineSupervisorAccount} from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
 import { GiLouvrePyramid } from 'react-icons/gi';
@@ -23,6 +23,7 @@ import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import product8 from './product8.jpg';
 import {LiaChalkboardTeacherSolid} from "react-icons/lia";
+import {PiStudentLight} from "react-icons/pi";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -533,13 +534,17 @@ export const links = [
         icon: <LiaChalkboardTeacherSolid />,
       },
       {
-        name: 'employees',
-        icon: <IoMdContacts />,
+        name: 'students',
+        icon: <PiStudentLight />,
       },
       {
-        name: 'customers',
-        icon: <RiContactsLine />,
+        name: 'admins',
+        icon: <MdOutlineAdminPanelSettings />,
       },
+      {
+        name: 'programs',
+        icon: <RiMiniProgramLine />,
+      }
     ],
   },
   {

@@ -4,6 +4,7 @@ import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
+/*import { useTableExport } from 'material-react-table';*/
 import {Button, Header} from "../components/index.jsx";
 import {people} from "../data/dummy.jsx";
 import {
@@ -15,26 +16,21 @@ import {
 } from "@tanstack/react-table";
 import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
-import {useGetAllTeachersQuery} from "../redux/slices/teacherSlice.js";
-import { SiNginxproxymanager } from "react-icons/si";
+import {useGetAllAdminsQuery} from "../redux/slices/adminApiSlice.js";
+import {SiNginxproxymanager} from "react-icons/si";
 
-const Teachers = () => {
+const Admins = () => {
     const columnHelper = createColumnHelper()
 
     const columns = [
-        columnHelper.accessor("teacherId", {
-            cell: (info)=> <span>{info.getValue()}</span>,
-            header: "ID"
-
-        }),
         columnHelper.accessor("name", {
             cell: (info)=> <span>{info.getValue()}</span>,
             header: "Name"
 
         }),
-        columnHelper.accessor("applicationStatus", {
+        columnHelper.accessor("role", {
             cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Status"
+            header: "Role"
 
         }),
         columnHelper.accessor("email", {
@@ -43,11 +39,11 @@ const Teachers = () => {
 
         }),
         columnHelper.accessor("manage", {
-            cell: (info)=>
+            cell: (info) =>
                 <button // Render a button component within the cell
                     className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
                 >
-                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
                 </button>
             ,
             header: "Manage"
@@ -55,19 +51,19 @@ const Teachers = () => {
         }),
     ]
 
-    const [teachers, setTeachers] = useState([])
-
-    const {data: teachersData, isLoading, isError, isSuccess} = useGetAllTeachersQuery()
+    const {data: adminsData, isLoading, isError, isSuccess} = useGetAllAdminsQuery()
+    const [admins, setAdmins] = useState([])
 
     useEffect(() => {
         if (isSuccess) {
-            setTeachers(teachersData.data)
+            setAdmins(adminsData.data)
         }
-        console.log(teachers)
-    }, [teachersData, isSuccess]);
+        console.log(admins)
+    }, [adminsData, isSuccess])
+    const [data] = useState(() => [...people])
     const [globalFilter, setGlobalFilter] = useState("")
     const table = useReactTable({
-        data: teachers,
+        data: admins,
         columns,
         state: {
             globalFilter
@@ -78,15 +74,15 @@ const Teachers = () => {
     })
     return (
         <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl overflow-auto"}>
-            <Header category={"Page"} title={"Orders"}/>
+            <Header category={"Page"} title={"Customers"}/>
             <div className={"flex items-center justify-between"}>
                 <DebouncedInput
                     value={globalFilter ?? ""}
                     onChange={(value)=> setGlobalFilter(String(value))}
                     className={"p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-cyan-500"}
                     placeholder={"Search..."}
-                    />
-                <DownloadBtn data={teachers} fileName={"Orders"}/>
+                />
+                <DownloadBtn data={data} fileName={"Orders"}/>
             </div>
             <table className={"border border-gray-700 w-full text-left mt-2"}>
                 <thead className={"bg-indigo-600"}>
@@ -127,14 +123,14 @@ const Teachers = () => {
                 <button onClick={()=>{
                     table.previousPage()
                 }}
-                disabled={!table.getCanPreviousPage()}
+                        disabled={!table.getCanPreviousPage()}
                         className={"p-1 border border-gray-200 px-2 disabled:opacity-30"}>
                     {"<"}
                 </button>
                 <button onClick={()=>{
                     table.nextPage()
                 }}
-                disabled={!table.getCanNextPage()}
+                        disabled={!table.getCanNextPage()}
                         className={"p-1 border border-gray-200 px-2 disabled:opacity-30"}>
                     {">"}
                 </button>
@@ -175,6 +171,4 @@ const Teachers = () => {
     )
 };
 
-export default Teachers;
-
-
+export default Admins;

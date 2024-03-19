@@ -1,11 +1,7 @@
-import { useMemo, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
     flexRender,
-    MaterialReactTable,
-    useMaterialReactTable,
 } from 'material-react-table';
-/*import { useTableExport } from 'material-react-table';*/
-import {Button, Header} from "../components/index.jsx";
 import {people} from "../data/dummy.jsx";
 import {
     createColumnHelper,
@@ -16,41 +12,56 @@ import {
 } from "@tanstack/react-table";
 import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
+import {Header} from "../components/index.jsx";
+import {useGetAllProgramsQuery} from "../redux/slices/programApiSlice.js";
+import {SiNginxproxymanager} from "react-icons/si";
 
-const Employees = () => {
+
+const Programs = () => {
     const columnHelper = createColumnHelper()
 
     const columns = [
-        columnHelper.accessor("id", {
+        columnHelper.accessor("code", {
             cell: (info)=> <span>{info.getValue()}</span>,
             header: "ID"
 
         }),
-        columnHelper.accessor("first_name", {
+        columnHelper.accessor("name", {
             cell: (info)=> <span>{info.getValue()}</span>,
-            header: "First Name"
+            header: "Program"
 
         }),
-        columnHelper.accessor("last_name", {
+        columnHelper.accessor("duration", {
             cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Last Name"
+            header: "Duration"
 
         }),
-        columnHelper.accessor("email", {
-            cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Email"
-
-        }),
-        columnHelper.accessor("gender", {
-            cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Gender"
+        columnHelper.accessor("manage", {
+            cell: (info) =>
+                <button // Render a button component within the cell
+                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
+                >
+                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
+                </button>
+            ,
+            header: "Manage"
 
         }),
     ]
-    const [data] = useState(()=>[...people])
+    const [data] = useState(() => [...people])
+
+    const [programs, setPrograms] = useState([])
+    const {data: programsData, isLoading, isError, isSuccess} = useGetAllProgramsQuery()
+
+    useEffect(() => {
+        if (isSuccess) {
+            setPrograms(programsData.data)
+        }
+        console.log(programs)
+    }, [programsData, isSuccess]);
     const [globalFilter, setGlobalFilter] = useState("")
     const table = useReactTable({
-        data,
+        data: programs,
         columns,
         state: {
             globalFilter
@@ -61,11 +72,11 @@ const Employees = () => {
     })
     return (
         <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl overflow-auto"}>
-            <Header category={"Page"} title={"Employees"}/>
+            <Header category={"Page"} title={"Programs"}/>
             <div className={"flex items-center justify-between"}>
                 <DebouncedInput
                     value={globalFilter ?? ""}
-                    onChange={(value)=> setGlobalFilter(String(value))}
+                    onChange={(value) => setGlobalFilter(String(value))}
                     className={"p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-cyan-500"}
                     placeholder={"Search..."}
                 />
@@ -74,10 +85,10 @@ const Employees = () => {
             <table className={"border border-gray-700 w-full text-left mt-2"}>
                 <thead className={"bg-indigo-600"}>
                 {
-                    table.getHeaderGroups().map((headerGroup)=>(
+                    table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {
-                                headerGroup.headers.map((header)=>(
+                                headerGroup.headers.map((header) => (
                                     <th key={header.id} className={"capitalize px-3.5 py-2"}>
                                         {flexRender(header.column.columnDef.header, header.getContext())}
                                     </th>
@@ -90,10 +101,10 @@ const Employees = () => {
                 <tbody>
                 {
                     table.getRowModel().rows.length ? (
-                        table.getRowModel().rows.map((row,index)=>(
+                        table.getRowModel().rows.map((row, index) => (
                             <tr key={row.id} className={`${index % 2 === 0 ? 'bg-gray-300' : 'bg-gray-200'}`}>
                                 {
-                                    row.getVisibleCells().map((cell)=>(
+                                    row.getVisibleCells().map((cell) => (
                                         <td key={cell.id} className={"px-3.5 py-2"}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </td>
@@ -107,14 +118,14 @@ const Employees = () => {
             </table>
             {/*PAGINATION*/}
             <div className={"flex items-center justify-end mt-2 gap-2"}>
-                <button onClick={()=>{
+                <button onClick={() => {
                     table.previousPage()
                 }}
                         disabled={!table.getCanPreviousPage()}
                         className={"p-1 border border-gray-200 px-2 disabled:opacity-30"}>
                     {"<"}
                 </button>
-                <button onClick={()=>{
+                <button onClick={() => {
                     table.nextPage()
                 }}
                         disabled={!table.getCanNextPage()}
@@ -134,7 +145,7 @@ const Employees = () => {
                         type={"number"}
                         defaultValue={table.getState().pagination.pageIndex + 1}
                         className={"p-1 border rounded bg-transparent w-16 border-gray-200 px-2"}
-                        onChange={(e)=>{
+                        onChange={(e) => {
                             const page = e.target.value ? Number(e.target.value) - 1 : 0;
                             table.setPageIndex(page)
                         }}
@@ -142,12 +153,12 @@ const Employees = () => {
                 </span>
                 <select
                     value={table.getState().pagination.pageSize}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         table.setPageSize(Number(e.target.value))
                     }}
                     className={"p-2 bg-transparent"}
                 >
-                    {[5,10,20,30,40,50].map((pageSize)=>(
+                    {[5, 10, 20, 30, 40, 50].map((pageSize) => (
                         <option key={pageSize} value={pageSize}>
                             Show {pageSize}
                         </option>
@@ -155,7 +166,7 @@ const Employees = () => {
                 </select>
             </div>
         </div>
-    )
+    );
 };
 
-export default Employees;
+export default Programs;

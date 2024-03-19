@@ -13,7 +13,7 @@ export const studentApiSlice = apiSlice.injectEndpoints({
         }),
         getAllStudents:builder.query({
             query:()=>({
-                url: `${STUDENT_URL}`,
+                url: `${STUDENT_URL}/all`,
                 method:'GET'
             })
         }),
