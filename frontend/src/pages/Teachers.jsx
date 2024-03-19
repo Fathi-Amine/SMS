@@ -1,10 +1,9 @@
-import { useMemo, useState } from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {
     flexRender,
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
-/*import { useTableExport } from 'material-react-table';*/
 import {Button, Header} from "../components/index.jsx";
 import {people} from "../data/dummy.jsx";
 import {
@@ -16,24 +15,26 @@ import {
 } from "@tanstack/react-table";
 import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
+import {useGetAllTeachersQuery} from "../redux/slices/teacherSlice.js";
+import { SiNginxproxymanager } from "react-icons/si";
 
-const Orders = () => {
+const Teachers = () => {
     const columnHelper = createColumnHelper()
 
     const columns = [
-        columnHelper.accessor("id", {
+        columnHelper.accessor("teacherId", {
             cell: (info)=> <span>{info.getValue()}</span>,
             header: "ID"
 
         }),
-        columnHelper.accessor("first_name", {
+        columnHelper.accessor("name", {
             cell: (info)=> <span>{info.getValue()}</span>,
-            header: "First Name"
+            header: "Name"
 
         }),
-        columnHelper.accessor("last_name", {
+        columnHelper.accessor("applicationStatus", {
             cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Last Name"
+            header: "Status"
 
         }),
         columnHelper.accessor("email", {
@@ -41,16 +42,33 @@ const Orders = () => {
             header: "Email"
 
         }),
-        columnHelper.accessor("gender", {
-            cell: (info)=> <span>{info.getValue()}</span>,
-            header: "Gender"
+        columnHelper.accessor("manage", {
+            cell: (info)=>
+                <button // Render a button component within the cell
+                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
+                >
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </button>
+            ,
+            header: "Manage"
 
         }),
     ]
+
+    const [teachers, setTeachers] = useState([])
+
+    const {data: teachersData, isLoading, isError, isSuccess} = useGetAllTeachersQuery()
+
+    useEffect(() => {
+        if (isSuccess) {
+            setTeachers(teachersData.data)
+        }
+        console.log(teachers)
+    }, [teachersData, isSuccess]);
     const [data] = useState(()=>[...people])
     const [globalFilter, setGlobalFilter] = useState("")
     const table = useReactTable({
-        data,
+        data: teachers,
         columns,
         state: {
             globalFilter
@@ -69,7 +87,7 @@ const Orders = () => {
                     className={"p-2 bg-transparent outline-none border-b-2 w-1/5 focus:w-1/3 duration-300 border-cyan-500"}
                     placeholder={"Search..."}
                     />
-                <DownloadBtn data={data} fileName={"Orders"}/>
+                <DownloadBtn data={teachers} fileName={"Orders"}/>
             </div>
             <table className={"border border-gray-700 w-full text-left mt-2"}>
                 <thead className={"bg-indigo-600"}>
@@ -158,6 +176,6 @@ const Orders = () => {
     )
 };
 
-export default Orders;
+export default Teachers;
 
 

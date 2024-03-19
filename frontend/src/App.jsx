@@ -6,7 +6,6 @@ import {Navbar, Sidebar, Footer, ThemeSettings} from "./components/index.jsx";
 import {
     Ecommerce,
     Employees,
-    Orders,
     Calendar,
     Stacked,
     Pyramid,

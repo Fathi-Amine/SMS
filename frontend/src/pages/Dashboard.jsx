@@ -16,7 +16,7 @@ import {
     Employees, Financial,
     Kanban,
     Line,
-    Orders, Pie, Pyramid, Stacked
+    Pie, Pyramid, Stacked, Teachers
 } from "./index.jsx";
 
 const Dashboard = () => {
@@ -58,7 +58,7 @@ const Dashboard = () => {
                                 <Route path={"/dashy"} element={<Ecommerce />}/>
                                 <Route path={"/ecommerce"} element={<Ecommerce/>}/>
                                 {/*Pages*/}
-                                <Route path={"/orders"} element={<Orders/>}/>
+                                <Route path={"/teachers"} element={<Teachers/>}/>
                                 <Route path={"/employees"} element={<Employees/>}/>
                                 <Route path={"/customers"} element={<Customers/>}/>
                                 {/*Apps*/}

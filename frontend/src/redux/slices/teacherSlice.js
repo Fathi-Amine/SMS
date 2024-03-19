@@ -26,7 +26,7 @@ export const teacherApiSlice = apiSlice.injectEndpoints({
         }),
         getAllTeachers:builder.query({
             query:()=>({
-                url: `${TEACHERS_URL}`,
+                url: `${TEACHERS_URL}/all`,
                 method:'GET'
             })
         }),

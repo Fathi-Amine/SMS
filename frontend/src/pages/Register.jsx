@@ -55,7 +55,6 @@ const Register = () => {
                 </div>
                 <form className="p-6"
                     onSubmit={submitHandler}>
-                >
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <label
