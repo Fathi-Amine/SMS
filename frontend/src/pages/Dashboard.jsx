@@ -19,6 +19,7 @@ import {
     Line,
     Pie, Programs, Pyramid, Stacked, Students, Subjects, Teachers
 } from "./index.jsx";
+import AcademicYear from "./academicYear.jsx";
 
 const Dashboard = () => {
     const menu = useSelector(state => state.interactivity.menu);
@@ -66,6 +67,7 @@ const Dashboard = () => {
                                 <Route path={"/subjects"} element={<Subjects/>}/>
                                 <Route path={"/academic-terms"} element={<AcademicTerms/>}/>
                                 <Route path={"/class-levels"} element={<ClassLevels/>}/>
+                                <Route path={"/academic-years"} element={<AcademicYear/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>
