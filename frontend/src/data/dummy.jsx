@@ -23,7 +23,7 @@ import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import product8 from './product8.jpg';
 import {LiaChalkboardTeacherSolid} from "react-icons/lia";
-import {PiStudentLight} from "react-icons/pi";
+import {PiExam, PiStudentLight} from "react-icons/pi";
 import {SiMicrosoftacademic} from "react-icons/si";
 
 export const gridOrderImage = (props) => (
@@ -561,6 +561,10 @@ export const links = [
       {
         name: 'class-levels',
         icon: <GiLevelEndFlag />,
+      },
+      {
+        name: 'exams',
+        icon: <PiExam />,
       },
     ],
   },

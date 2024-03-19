@@ -13,7 +13,7 @@ import {
     Calendar, ClassLevels, ColorMapping,
     ColorPicker,
     Ecommerce,
-    Editor,
+    Editor, Exams,
     Financial,
     Kanban,
     Line,
@@ -68,6 +68,7 @@ const Dashboard = () => {
                                 <Route path={"/academic-terms"} element={<AcademicTerms/>}/>
                                 <Route path={"/class-levels"} element={<ClassLevels/>}/>
                                 <Route path={"/academic-years"} element={<AcademicYear/>}/>
+                                <Route path={"/exams"} element={<Exams/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>

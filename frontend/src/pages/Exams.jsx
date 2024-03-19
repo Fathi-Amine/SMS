@@ -2,7 +2,10 @@ import React, {useEffect} from 'react';
 import { useMemo, useState } from 'react';
 import {
     flexRender,
+    MaterialReactTable,
+    useMaterialReactTable,
 } from 'material-react-table';
+/*import { useTableExport } from 'material-react-table';*/
 import {Button, Header} from "../components/index.jsx";
 import {people} from "../data/dummy.jsx";
 import {
@@ -14,10 +17,10 @@ import {
 } from "@tanstack/react-table";
 import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
-import {useGetAllAcademicYearsQuery} from "../redux/slices/academicYearSlice.js";
+import {useGetAllExamsQuery} from "../redux/slices/examApiSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
 
-const AcademicYear = () => {
+const Exams = () => {
     const columnHelper = createColumnHelper()
 
     const columns = [
@@ -26,53 +29,46 @@ const AcademicYear = () => {
             header: "Name"
 
         }),
-        columnHelper.accessor("fromYear", {
-            cell: (info)=> {
-                const dateString = info.getValue();
-                const dateObject = new Date(dateString);
-                const formattedDate = dateObject.toLocaleDateString(); // Customize format if needed
-                return <span>{formattedDate}</span>;
-            },
-            header: "From"
+        columnHelper.accessor("examType", {
+            cell: (info)=> <span>{info.getValue()}</span>,
+            header: "Type"
 
         }),
-        columnHelper.accessor("toYear", {
-            cell: (info)=> {
-                const dateString = info.getValue();
-                const dateObject = new Date(dateString);
-                const formattedDate = dateObject.toLocaleDateString(); // Customize format if needed
-                return <span>{formattedDate}</span>;
-            },
-            header: "To"
+        columnHelper.accessor("passMark", {
+            cell: (info)=> <span>{info.getValue()}</span>,
+            header: "Pass Mark"
 
         }),
-        columnHelper.accessor("gender", {
-            cell: (info) =>
-                <button // Render a button component within the cell
-                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
-                >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
-            ,
-            header: "Gender"
+        columnHelper.accessor("examStatus", {
+            cell: (info)=> <span>{info.getValue()}</span>,
+            header: "Status"
+
+        }),
+        columnHelper.accessor("manage", {
+            cell: (info)=> <button // Render a button component within the cell
+                className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
+            >
+                <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
+            </button>,
+            header: "Manage"
 
         }),
     ]
 
-    const [academicYears, setAcademicYears] = useState([])
+    const [exams, setExams] = useState([])
 
-    const {data: academicYearsData, isLoading, isSuccess, isError} = useGetAllAcademicYearsQuery()
+    const {data: examsData, isLoading, isSuccess, isError} = useGetAllExamsQuery()
 
     useEffect(() => {
         if (isSuccess) {
-            setAcademicYears(academicYearsData.data)
+            setExams(examsData.data)
         }
-        console.log(academicYears)
-    }, [academicYearsData, isSuccess]);
+        console.log(exams)
+    }, [examsData, isSuccess]);
     const [data] = useState(()=>[...people])
     const [globalFilter, setGlobalFilter] = useState("")
     const table = useReactTable({
-        data: academicYears,
+        data: exams,
         columns,
         state: {
             globalFilter
@@ -83,7 +79,7 @@ const AcademicYear = () => {
     })
     return (
         <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl overflow-auto"}>
-            <Header category={"Page"} title={"Academic Years"}/>
+            <Header category={"Page"} title={"Exams"}/>
             <div className={"flex items-center justify-between"}>
                 <DebouncedInput
                     value={globalFilter ?? ""}
@@ -180,4 +176,4 @@ const AcademicYear = () => {
     );
 };
 
-export default AcademicYear;
+export default Exams;
