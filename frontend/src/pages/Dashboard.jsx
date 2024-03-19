@@ -16,7 +16,7 @@ import {
     Financial,
     Kanban,
     Line,
-    Pie, Programs, Pyramid, Stacked, Students, Teachers
+    Pie, Programs, Pyramid, Stacked, Students, Subjects, Teachers
 } from "./index.jsx";
 
 const Dashboard = () => {
@@ -62,6 +62,7 @@ const Dashboard = () => {
                                 <Route path={"/students"} element={<Students/>}/>
                                 <Route path={"/admins"} element={<Admins/>}/>
                                 <Route path={"/programs"} element={<Programs/>}/>
+                                <Route path={"/subjects"} element={<Subjects/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>
