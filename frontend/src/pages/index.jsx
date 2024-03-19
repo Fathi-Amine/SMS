@@ -7,6 +7,7 @@ export { default as Editor } from './Editor';
 export { default as Admins } from './Admins.jsx';
 export { default as Programs } from './Programs.jsx';
 export { default as Subjects } from './Subjects.jsx';
+export { default as AcademicTerms } from './AcademicTerms.jsx';
 export { default as ColorPicker } from './ColorPicker';
 export { default as Calendar } from './Calender.jsx';
 export { default as Area } from './Charts/Area';

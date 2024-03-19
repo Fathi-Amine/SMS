@@ -6,6 +6,7 @@ import {FiSettings} from "react-icons/fi";
 import {Navbar, Sidebar} from "../components/index.jsx";
 import Home from "./Home.jsx";
 import {
+    AcademicTerms,
     Admins,
     Area,
     Bar,
@@ -63,6 +64,7 @@ const Dashboard = () => {
                                 <Route path={"/admins"} element={<Admins/>}/>
                                 <Route path={"/programs"} element={<Programs/>}/>
                                 <Route path={"/subjects"} element={<Subjects/>}/>
+                                <Route path={"/academic-terms"} element={<AcademicTerms/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>

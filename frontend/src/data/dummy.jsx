@@ -24,6 +24,7 @@ import product7 from './product7.jpg';
 import product8 from './product8.jpg';
 import {LiaChalkboardTeacherSolid} from "react-icons/lia";
 import {PiStudentLight} from "react-icons/pi";
+import {SiMicrosoftacademic} from "react-icons/si";
 
 export const gridOrderImage = (props) => (
   <div>
@@ -548,7 +549,12 @@ export const links = [
       {
         name: 'subjects',
         icon: <MdOutlineSubject />,
-      },    ],
+      },
+      {
+        name: 'academic-terms',
+        icon: <SiMicrosoftacademic />,
+      },
+    ],
   },
   {
     title: 'Apps',
