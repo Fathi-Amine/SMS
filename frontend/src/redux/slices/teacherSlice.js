@@ -30,7 +30,13 @@ export const teacherApiSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getTeacherById:builder.query({
+            query:(id)=>({
+                url: `${TEACHERS_URL}/${id}/admin`,
+                method:'GET'
+            })
+        }),
     })
 })
 
-export const {useLoginMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery} = teacherApiSlice;
+export const {useLoginMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery} = teacherApiSlice;

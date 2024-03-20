@@ -107,7 +107,7 @@ exports.adminGettingAllTeachers = AysncHandler(async (req, res) => {
 exports.getTeacherByAdmin = AysncHandler(async (req, res) => {
     const teacherID = req.params.teacherID;
     //find the teacher
-    const teacher = await Teacher.findById(teacherID);
+    const teacher = await Teacher.findById(teacherID).populate("subject");
     if (!teacher) {
         throw new Error("Teacher not found");
     }
