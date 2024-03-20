@@ -20,6 +20,15 @@ import {
     Pie, Programs, Pyramid, Stacked, Students, Subjects, Teachers, YearGroups
 } from "./index.jsx";
 import AcademicYear from "./academicYear.jsx";
+import {
+    AcademicTermsManagement, AcademicYearsManagement, AdminsManagement,
+    ClassLevelsManagement,
+    ExamManagement, ProgramManagement,
+    StudentManagement,
+    SubjectManagement,
+    TeacherManagement,
+    YearGroupManagement
+} from "./management/index.jsx";
 
 const Dashboard = () => {
     const menu = useSelector(state => state.interactivity.menu);
@@ -70,6 +79,16 @@ const Dashboard = () => {
                                 <Route path={"/academic-years"} element={<AcademicYear/>}/>
                                 <Route path={"/exams"} element={<Exams/>}/>
                                 <Route path={"/groups"} element={<YearGroups/>}/>
+                                <Route path={"/manage/groups/:id"} element={<YearGroupManagement/>}/>
+                                <Route path={"/manage/teachers/:id"} element={<TeacherManagement/>}/>
+                                <Route path={"/manage/students/:id"} element={<StudentManagement/>}/>
+                                <Route path={"/manage/subjects/:id"} element={<SubjectManagement/>}/>
+                                <Route path={"/manage/exams/:id"} element={<ExamManagement/>}/>
+                                <Route path={"/manage/class-level/:id"} element={<ClassLevelsManagement/>}/>
+                                <Route path={"/manage/program/:id"} element={<ProgramManagement/>}/>
+                                <Route path={"/manage/academic-term/:id"} element={<AcademicTermsManagement/>}/>
+                                <Route path={"/manage/academic-year/:id"} element={<AcademicYearsManagement/>}/>
+                                <Route path={"/manage/admin/:id"} element={<AdminsManagement/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>
