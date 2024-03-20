@@ -18,6 +18,7 @@ import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
 import {useGetAllStudentsQuery} from "../redux/slices/studentApiSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
+import {Link} from "react-router-dom";
 
 const Students = () => {
     const columnHelper = createColumnHelper()
@@ -50,11 +51,12 @@ const Students = () => {
         }),
         columnHelper.accessor("gender", {
             cell: (info)=>
-                <button
+                <Link
+                    to={`/admin/manage/students/${info.row.original._id}`}
                     className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
                 >
-                <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>,
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </Link>,
             header: "Gender"
 
         }),

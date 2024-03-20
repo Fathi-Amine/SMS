@@ -85,6 +85,7 @@ const TeacherManagement = () => {
 
 
     const handleDeleteTeacher = (e) => {
+        e.preventDefault()
         console.log("delete")
     }
 

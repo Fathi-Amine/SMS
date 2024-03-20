@@ -31,7 +31,13 @@ export const studentApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        getStudentByAdmin:builder.query({
+            query:(id)=>({
+                url: `${STUDENT_URL}/${id}/admin`,
+                method:'GET'
+            })
+        }),
     })
 })
 
-export const {useAddStudentMutation, useGetAllStudentsQuery, useUpdateStudentMutation, useDeleteStudentMutation} = studentApiSlice;
+export const {useAddStudentMutation, useGetAllStudentsQuery, useUpdateStudentMutation, useDeleteStudentMutation, useGetStudentByAdminQuery} = studentApiSlice;
