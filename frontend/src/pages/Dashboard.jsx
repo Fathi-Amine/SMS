@@ -21,7 +21,7 @@ import {
 } from "./index.jsx";
 import AcademicYear from "./academicYear.jsx";
 import {
-    AcademicTermsManagement, AcademicYearsManagement, AdminsManagement,
+    AcademicTermsManagement, AcademicYearsManagement,
     ClassLevelsManagement,
     ExamManagement, ProgramManagement,
     StudentManagement,
@@ -88,7 +88,6 @@ const Dashboard = () => {
                                 <Route path={"/manage/program/:id"} element={<ProgramManagement/>}/>
                                 <Route path={"/manage/academic-term/:id"} element={<AcademicTermsManagement/>}/>
                                 <Route path={"/manage/academic-year/:id"} element={<AcademicYearsManagement/>}/>
-                                <Route path={"/manage/admin/:id"} element={<AdminsManagement/>}/>
                                 {/*Apps*/}
                                 <Route path={"/data-entry"} element={<Kanban/>}/>
                                 <Route path={"/editor"} element={<Editor/>}/>

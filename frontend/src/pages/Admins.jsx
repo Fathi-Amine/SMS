@@ -18,6 +18,7 @@ import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
 import {useGetAllAdminsQuery} from "../redux/slices/adminApiSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
+import {Link} from "react-router-dom";
 
 const Admins = () => {
     const columnHelper = createColumnHelper()
@@ -38,17 +39,7 @@ const Admins = () => {
             header: "Email"
 
         }),
-        columnHelper.accessor("manage", {
-            cell: (info) =>
-                <button // Render a button component within the cell
-                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
-                >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
-            ,
-            header: "Manage"
 
-        }),
     ]
 
     const {data: adminsData, isLoading, isError, isSuccess} = useGetAllAdminsQuery()

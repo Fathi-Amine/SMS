@@ -12,7 +12,7 @@ const StudentsManagement = () => {
         studentId: '',
         isWithdrawn: false,
         isSuspended: false,
-        classLevel: '',
+        classLevels: '',
         program: '',
         academicYear: '',
         isGraduated: false,
@@ -64,6 +64,7 @@ const StudentsManagement = () => {
 
     const handleSubmit = (e)=> {
         e.preventDefault()
+        console.log(formData)
         console.log("submit")
     }
 
@@ -229,8 +230,8 @@ const StudentsManagement = () => {
                                             Level</label>
                                         <div className="">
                                             <select
-                                                value={formData.classLevel}
-                                                onChange={(e) => setFormData({...formData, classLevel: e.target.value})}
+                                                value={formData.classLevels}
+                                                onChange={(e) => setFormData({...formData, classLevels: e.target.value})}
                                                 id="classLevel"
                                                 name="classLevel"
                                                 autoComplete="country-name"
@@ -272,7 +273,7 @@ const StudentsManagement = () => {
                             </div>
                         </div>
 
-                        <div className="mt-4 flex items-center justify-end gap-x-6">
+                        <div className="mt-4 flex items-center justify-end w-[93%]">
                             <button type="submit"
                                     className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save
                             </button>

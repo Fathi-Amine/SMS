@@ -15,6 +15,7 @@ import DebouncedInput from "../components/DebouncedInput.jsx";
 import {Header} from "../components/index.jsx";
 import {useGetAllProgramsQuery} from "../redux/slices/programApiSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
+import {Link} from "react-router-dom";
 
 
 const Programs = () => {
@@ -38,11 +39,12 @@ const Programs = () => {
         }),
         columnHelper.accessor("manage", {
             cell: (info) =>
-                <button // Render a button component within the cell
+                <Link
+                    to={`/admin/manage/program/${info.row.original._id}`}
                     className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
                 >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </Link>
             ,
             header: "Manage"
 

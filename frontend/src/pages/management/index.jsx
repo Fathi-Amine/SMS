@@ -1,6 +1,5 @@
 export { default as AcademicTermsManagement } from './AcademicTermsManagement.jsx';
 export { default as AcademicYearsManagement } from './AcademicYearsManagement.jsx';
-export { default as AdminsManagement } from './AdminsManagement.jsx';
 export { default as ClassLevelsManagement } from './ClassLevelsManagement.jsx';
 export { default as ExamManagement } from './ExamManagement.jsx';
 export { default as ProgramManagement } from './ProgramsManagement.jsx';

@@ -17,6 +17,12 @@ export const programApiSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getProgram: builder.query({
+            query:(id)=>({
+                url: `${PROGRAM_URL}/${id}`,
+                method: 'GET'
+            })
+        }),
         updateProgram: builder.mutation({
             query:(data)=>({
                 url: `${PROGRAM_URL}/update-program`,
@@ -35,4 +41,4 @@ export const programApiSlice = apiSlice.injectEndpoints({
 })
 
 
-export const {useAddProgramMutation, useGetAllProgramsQuery, useUpdateProgramMutation, useDeleteProgramMutation} = programApiSlice;
+export const {useAddProgramMutation, useGetAllProgramsQuery, useGetProgramQuery, useUpdateProgramMutation, useDeleteProgramMutation} = programApiSlice;
