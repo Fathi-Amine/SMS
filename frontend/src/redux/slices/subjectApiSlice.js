@@ -17,6 +17,12 @@ export const subjectApiSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getSubject: builder.query({
+            query:(id)=>({
+                url: `${SUBJECT_URL}/${id}`,
+                method: 'GET'
+            })
+        }),
         updateSubject: builder.mutation({
             query:(data)=>({
                 url: `${SUBJECT_URL}/update-subject`,
@@ -34,4 +40,4 @@ export const subjectApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useAddSubjectMutation, useGetAllSubjectsQuery, useUpdateSubjectMutation, useDeleteSubjectMutation} = subjectApiSlice;
+export const {useAddSubjectMutation, useGetAllSubjectsQuery, useGetSubjectQuery, useUpdateSubjectMutation, useDeleteSubjectMutation} = subjectApiSlice;

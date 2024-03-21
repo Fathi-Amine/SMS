@@ -16,6 +16,7 @@ import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
 import {useGetAllSubjectsQuery} from "../redux/slices/subjectApiSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
+import {Link} from "react-router-dom";
 
 const Subjects = () => {
     const columnHelper = createColumnHelper()
@@ -33,11 +34,12 @@ const Subjects = () => {
         }),
         columnHelper.accessor("manage", {
             cell: (info) =>
-                <button // Render a button component within the cell
-                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
+                <Link
+                    to={`/admin/manage/subjects/${info.row.original._id}`}
+                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg w-[100px]"// Customize button properties as needed (e.g., onClick handler)
                 >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </Link>
             ,
             header: "Manage"
 
