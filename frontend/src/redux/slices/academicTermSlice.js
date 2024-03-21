@@ -17,6 +17,12 @@ export const academicTermSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getAcademicTerm : builder.query({
+            query:(id)=>({
+                url: `${ACADEMIC_TERM_URL}/${id}`,
+                method: 'GET'
+            })
+        }),
         updateAcademicTerm: builder.mutation({
             query:(data)=>({
                 url: `${ACADEMIC_TERM_URL}/update-academic-term`,
@@ -34,4 +40,4 @@ export const academicTermSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useAddAcademicTermMutation, useGetAllAcademicTermsQuery, useUpdateAcademicTermMutation, useDeleteAcademicTermMutation} = academicTermSlice;
+export const {useAddAcademicTermMutation, useGetAllAcademicTermsQuery, useGetAcademicTermQuery, useUpdateAcademicTermMutation, useDeleteAcademicTermMutation} = academicTermSlice;

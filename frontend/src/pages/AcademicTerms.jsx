@@ -17,6 +17,7 @@ import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
 import {SiNginxproxymanager} from "react-icons/si";
 import {useGetAllAcademicTermsQuery} from "../redux/slices/academicTermSlice.js";
+import {Link} from "react-router-dom";
 
 const AcademicTerms = () => {
     const columnHelper = createColumnHelper()
@@ -34,11 +35,12 @@ const AcademicTerms = () => {
         }),
         columnHelper.accessor("manage", {
             cell: (info) =>
-                <button // Render a button component within the cell
+                <Link
+                    to={`/admin/manage/academic-term/${info.row.original._id}`}
                     className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
                 >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </Link>
             ,
             header: "Manage"
 
@@ -69,7 +71,7 @@ const AcademicTerms = () => {
     })
     return (
         <div className={"m-2 md:m-10 p-2 md:p-10 bg-white rounded-3xl overflow-auto"}>
-            <Header category={"Page"} title={"Employees"}/>
+            <Header category={"Page"} title={"Academic Terms"}/>
             <div className={"flex items-center justify-between"}>
                 <DebouncedInput
                     value={globalFilter ?? ""}
