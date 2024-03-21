@@ -19,6 +19,7 @@ import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
 import {SiNginxproxymanager} from "react-icons/si";
 import {useGetAllYearGroupsQuery} from "../redux/slices/YearGroupApiSlice.js";
+import {Link} from "react-router-dom";
 
 const YearGroups = () => {
     const columnHelper = createColumnHelper()
@@ -42,11 +43,12 @@ const YearGroups = () => {
         }),
         columnHelper.accessor("manage", {
             cell: (info) =>
-                <button // Render a button component within the cell
-                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
+                <Link
+                    to={`/admin/manage/groups/${info.row.original._id}`}
+                    className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg w-[93px]"// Customize button properties as needed (e.g., onClick handler)
                 >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </Link>
             ,
             header: "Manage"
 

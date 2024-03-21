@@ -17,6 +17,12 @@ export const academicYearApiSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getAcademicYear: builder.query({
+            query:(id)=>({
+                url: `${ACADEMIC_YEARS_URL}/${id}`,
+                method: 'GET'
+            })
+        }),
         updateAcademicYear: builder.mutation({
             query:(data)=>({
                 url: `${ACADEMIC_YEARS_URL}/update-academic-year`,
@@ -34,4 +40,4 @@ export const academicYearApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useAddAcademicYearMutation, useGetAllAcademicYearsQuery, useUpdateAcademicYearMutation, useDeleteAcademicYearMutation} = academicYearApiSlice;
+export const {useAddAcademicYearMutation, useGetAllAcademicYearsQuery, useGetAcademicYearQuery, useUpdateAcademicYearMutation, useDeleteAcademicYearMutation} = academicYearApiSlice;

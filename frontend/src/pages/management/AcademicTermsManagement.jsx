@@ -40,7 +40,7 @@ const AcademicTermsManagement = () => {
                             <div className="border-b border-gray-900/10 pb-2">
                                 <div className={"flex justify-between items-center"}>
                                     <div>
-                                        <h2 className="text-base font-semibold leading-7 text-gray-900">Program
+                                        <h2 className="text-base font-semibold leading-7 text-gray-900">Academic Terms
                                             Information
                                         </h2>
                                         <p className=" text-sm text-gray-600 mt-2">You need to add a good Informations
@@ -103,7 +103,7 @@ const AcademicTermsManagement = () => {
 
                                     <div className="col-span-full">
                                         <label htmlFor="about"
-                                               className="block text-sm font-medium leading-6 text-gray-900">About</label>
+                                               className="block text-sm font-medium leading-6 text-gray-900">Description</label>
                                         <div className="">
                                             <textarea
                                                 value={formData.description}
@@ -123,7 +123,7 @@ const AcademicTermsManagement = () => {
                             </div>
                         </div>
 
-                        <div className="mt-4 flex items-center justify-end gap-x-6">
+                        <div className="mt-4 flex items-center justify-end w-[93%]">
                             <button type="submit"
                                     className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save
                             </button>

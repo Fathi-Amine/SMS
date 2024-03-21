@@ -3,31 +3,36 @@ const AcademicTerm = require("../../Models/Academic/AcademicTerm");
 const Admin = require("../../Models/Staff/Admin");
 
 exports.createAcademicTerm = AsyncHandler(async (req, res) => {
-    const { name, description, duration } = req.body;
-    const academicTerm = await AcademicTerm.findOne({ name });
-    if (academicTerm) {
-        throw new Error("Academic term already exists");
+    try {
+        const {name, description, duration} = req.body;
+        const academicTerm = await AcademicTerm.findOne({name});
+        if (academicTerm) {
+            return res.status(400).json({ message: "Academic term already exists" });
+        }
+        const academicTermCreated = await AcademicTerm.create({
+            name,
+            description,
+            duration,
+            createdBy: req.user.id,
+        });
+        const admin = await Admin.findById(req.user.id);
+        admin.academicTerm.push(academicTermCreated._id);
+        await admin.save();
+        res.status(201).json({
+            status: "success",
+            message: "Academic term created successfully",
+            data: academicTermCreated,
+        });
+    }catch (error) {
+        res.status(500).json({ message: error.message });
+
     }
-    const academicTermCreated = await AcademicTerm.create({
-        name,
-        description,
-        duration,
-        createdBy: req.user.id,
-    });
-    const admin = await Admin.findById(req.user.id);
-    admin.academicTerm.push(academicTermCreated._id);
-    await admin.save();
-    res.status(201).json({
-        status: "success",
-        message: "Academic term created successfully",
-        data: academicTermCreated,
-    });
 });
 
 exports.getAcademicTerms = AsyncHandler(async (req, res) => {
     const academicTerms = await AcademicTerm.find();
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Academic terms fetched successfully",
         data: academicTerms,
@@ -37,9 +42,9 @@ exports.getAcademicTerms = AsyncHandler(async (req, res) => {
 exports.getAcademicTerm = AsyncHandler(async (req, res) => {
     const academicTerms = await AcademicTerm.findById(req.params.id);
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
-        message: "Academic terms fetched successfully",
+        message: "Academic term fetched successfully",
         data: academicTerms,
     });
 });
@@ -80,7 +85,7 @@ exports.updateAcademicTerms = AsyncHandler(async (req, res) => {
 exports.deleteAcademicTerm = AsyncHandler(async (req, res) => {
     await AcademicTerm.findByIdAndDelete(req.params.id);
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Academic term deleted successfully",
     });

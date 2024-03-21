@@ -16,6 +16,7 @@ import DownloadBtn from "../components/DownloadBtn.jsx";
 import DebouncedInput from "../components/DebouncedInput.jsx";
 import {useGetAllAcademicYearsQuery} from "../redux/slices/academicYearSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
+import {Link} from "react-router-dom";
 
 const AcademicYear = () => {
     const columnHelper = createColumnHelper()
@@ -48,11 +49,12 @@ const AcademicYear = () => {
         }),
         columnHelper.accessor("gender", {
             cell: (info) =>
-                <button // Render a button component within the cell
+                <Link
+                    to={`/admin/manage/academic-year/${info.row.original._id}`}
                     className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg"// Customize button properties as needed (e.g., onClick handler)
                 >
-                    <SiNginxproxymanager className={"text-xl"}/> <span>Manage</span>
-                </button>
+                    <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>
+                </Link>
             ,
             header: "Gender"
 

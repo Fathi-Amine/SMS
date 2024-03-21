@@ -17,6 +17,12 @@ export const classLevelSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getClassLevel: builder.query({
+            query:(id)=>({
+                url: `${CLASS_LEVEL_URL}/${id}`,
+                method: 'GET'
+            })
+        }),
         updateClassLevel: builder.mutation({
             query:(data)=>({
                 url: `${CLASS_LEVEL_URL}/update-class-level`,
@@ -34,4 +40,4 @@ export const classLevelSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useAddClassLevelMutation, useGetAllClassLevelsQuery, useUpdateClassLevelMutation, useDeleteClassLevelMutation} = classLevelSlice;
+export const {useAddClassLevelMutation, useGetAllClassLevelsQuery, useGetClassLevelQuery, useUpdateClassLevelMutation, useDeleteClassLevelMutation} = classLevelSlice;
