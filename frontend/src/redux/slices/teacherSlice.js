@@ -4,7 +4,7 @@ const TEACHERS_URL = '/api/v1/teachers'
 
 export const teacherApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder)=>({
-        login: builder.mutation({
+        loginTeacher: builder.mutation({
             query:(data)=>({
                 url: `${TEACHERS_URL}/login`,
                 method: 'POST',
@@ -39,4 +39,4 @@ export const teacherApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useLoginMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery} = teacherApiSlice;
+export const {useLoginTeacherMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery} = teacherApiSlice;

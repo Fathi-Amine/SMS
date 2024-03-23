@@ -1,23 +1,6 @@
 import React, {useEffect} from 'react'
 import {BrowserRouter as Router , Routes, Route} from 'react-router-dom'
-import {FiSettings} from "react-icons/fi";
-import {TooltipComponent} from "@syncfusion/ej2-react-popups";
-import {Navbar, Sidebar, Footer, ThemeSettings} from "./components/index.jsx";
-import {
-    Ecommerce,
-    Calendar,
-    Stacked,
-    Pyramid,
-    Kanban,
-    Area,
-    Bar,
-    Pie,
-    Financial,
-    ColorPicker,
-    ColorMapping,
-    Editor,
-    Line
-} from "./pages/index.jsx";
+
 import './App.css'
 import {useSelector} from "react-redux";
 import Home from "./pages/Home.jsx";
@@ -25,6 +8,8 @@ import PrivateRoutes from "./components/PrivateRoutes.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import TeacherDashboard from "./pages/teacherDashboard.jsx";
+import PrivateRoute from "./components/PrivateRoutes.jsx";
 
 function App() {
     return (
@@ -33,9 +18,23 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="" element={<PrivateRoutes />} >
-                    <Route path="/admin/*" element={<Dashboard />} /> // Use the PrivateRoute component for the Dashboard route
-                </Route>
+                <Route path="/admin/*"
+                       element={
+                    <PrivateRoute role="admin">
+                        <Dashboard />
+                    </PrivateRoute>}
+                />
+                <Route path="/teacher/*"
+                       element={
+                    <PrivateRoute
+                        role="teacher">
+                        <TeacherDashboard />
+                    </PrivateRoute>}
+                />
+                {/*<Route path="" element={<PrivateRoutes />} >
+                    <Route path="/admin/*" element={<Dashboard />} />
+                    <Route path="/teacher/*" element={<TeacherDashboard />} />
+                </Route>*/}
             </Routes>
         </Router>
     )

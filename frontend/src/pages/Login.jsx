@@ -4,29 +4,42 @@ import {useLoginMutation} from "../redux/slices/adminApiSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setCredentials} from "../redux/slices/authSlice.js";
+import {useLoginTeacherMutation} from "../redux/slices/teacherSlice.js";
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [role, setRole] = useState('admin')
 
     const [login,{isLoading}] = useLoginMutation()
+    const [loginTeacher,{isLoadingTeacher}] = useLoginTeacherMutation()
     const {userInfo} = useSelector((state)=>state.auth)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     useEffect(()=>{
-        if(userInfo){
+        if(userInfo && userInfo.data.role === 'admin'){
             navigate('/admin/dashy')
+        }else if (userInfo && userInfo.data.role === 'teacher'){
+            navigate('/teacher/dashboard')
         }
     }, [navigate, userInfo])
 
     const submitHandler = async (e)=>{
         e.preventDefault()
+        console.log(email, password, role)
         try{
             console.log(email, password)
-            const res = await login({email, password}).unwrap()
-            dispatch(setCredentials({...res}))
-            navigate('/')
+            if (role === 'admin'){
+                const res = await login({email, password}).unwrap()
+                dispatch(setCredentials({...res}))
+                navigate('/')
+            }else if (role === 'teacher'){
+                const res = await loginTeacher({email, password}).unwrap()
+                dispatch(setCredentials({...res}))
+                navigate('/teacher/dashboard')
+            }
+
         }catch (error) {
             /*toast.error(error?.data?.msg || error.error)*/
             console.log(error)
@@ -64,6 +77,17 @@ const Login = () => {
                         value={password}
                         onChange={(e)=>setPassword(e.target.value)}
                         />
+                        <div className={"flex justify-start items-center"}>
+                            <input
+                                className={"h-5 w-5 ml-2"}
+                                type={"checkbox"}
+                                id={"role"}
+                                name={"role"}
+                                value={"teacher"}
+                                onChange={(e) => setRole(e.target.value)}
+                            />
+                            <label className="text-sm font-medium ml-2" htmlFor="role">Login as teacher</label>
+                        </div>
 
                         <button
                             className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border-1 ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-black/90 h-10 px-4 py-2 w-full hover:text-white"

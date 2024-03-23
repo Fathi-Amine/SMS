@@ -32,6 +32,7 @@ import {
 
 const Dashboard = () => {
     const menu = useSelector(state => state.interactivity.menu);
+
     console.log(menu)
     return (
         <div>

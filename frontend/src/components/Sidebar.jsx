@@ -3,16 +3,20 @@ import {Link, NavLink} from "react-router-dom";
 import { FaSchoolFlag } from "react-icons/fa6";
 import {MdOutlineCancel} from "react-icons/md";
 import {TooltipComponent} from "@syncfusion/ej2-react-popups";
-import {links} from '../data/dummy.jsx';
+import {links, teacherLinks} from '../data/dummy.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleMenu } from '../redux/interactivitySlices.js'
 
 const Sidebar = () => {
     const menu = useSelector(state => state.interactivity.menu);
     const screenSize = useSelector(state => state.interactivity.screenSize);
+    const userInfo = useSelector(state => state.auth.userInfo);
     const activeLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-white text-md m-2";
     const normalLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2"
     const dispatch = useDispatch();
+
+    const displayLinks = userInfo.data.role === 'admin' ? links : teacherLinks;
+
 
     const handleCloseMenu = () => {
         if (menu && screenSize <= 900) {
@@ -37,7 +41,7 @@ const Sidebar = () => {
                         </TooltipComponent>
                     </div>
                     <div className={"mt-10"}>
-                        {links.map((item, index) => (
+                        {displayLinks.map((item, index) => (
                             <div key={index}>
                                 <p className={"text-gray-400 m-3 mt-4 uppercase"}>
                                     {item.title}

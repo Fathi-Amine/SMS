@@ -20,9 +20,16 @@ import DebouncedInput from "../components/DebouncedInput.jsx";
 import {useGetAllExamsQuery} from "../redux/slices/examApiSlice.js";
 import {SiNginxproxymanager} from "react-icons/si";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const Exams = () => {
     const columnHelper = createColumnHelper()
+
+    const { userInfo } = useSelector((state) => state.auth);
+
+    const baseUrl = userInfo.data.role === 'admin' ? '/admin/manage/exams/' : '/teacher/manage/exams/';
+
+
 
     const columns = [
         columnHelper.accessor("name", {
@@ -48,7 +55,7 @@ const Exams = () => {
         columnHelper.accessor("manage", {
             cell: (info)=>
                 <Link
-                    to={`/admin/manage/exams/${info.row.original._id}`}
+                    to={`${baseUrl}${info.row.original._id}`}
                     className="text-white flex justify-center items-center gap-1 p-2 bg-cyan-500 rounded-lg w-[100px]"// Customize button properties as needed (e.g., onClick handler)
                 >
                     <SiNginxproxymanager className={"text-xl"}/> <span >Manage</span>

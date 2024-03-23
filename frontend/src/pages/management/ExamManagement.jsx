@@ -109,7 +109,7 @@ const ExamManagement = () => {
 
                                     <div className="sm:col-span-6 border-b-1 flex justify-start items-center">
                                         <span className={"border-r-1 p-2 font-semibold w-[140px]"}>N. Questions:</span>
-                                        <span className={"p-2"}>{exam?.questions.length}</span>
+                                        <span className={"p-2"}>{exam?.questions?.length}</span>
 
                                     </div>
                                 </div>
