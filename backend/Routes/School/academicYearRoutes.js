@@ -12,7 +12,7 @@ const {authMiddleware} = require("../../Middlewares/authMiddleware");
 const academicYearRoutes = express.Router();
 
 academicYearRoutes.post("/", authMiddleware, isAdmin, createAcademicYear);
-academicYearRoutes.get("/", authMiddleware, isAdmin, getAcademicYears);
+academicYearRoutes.get("/", authMiddleware, getAcademicYears);
 academicYearRoutes.get("/:id", authMiddleware, isAdmin, getAcademicYear);
 academicYearRoutes.put("/:id", authMiddleware, isAdmin, updateAcademicYear);
 academicYearRoutes.delete("/:id", authMiddleware, isAdmin, deleteAcademicYear);

@@ -18,7 +18,7 @@ const programRoutes = express.Router();
 programRoutes
     .route("/")
     .post(authMiddleware, isAdminMiddleware, createProgram)
-    .get(authMiddleware, isAdminMiddleware, getPrograms);
+    .get(authMiddleware, getPrograms);
 
 programRoutes
     .route("/:id")

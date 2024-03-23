@@ -18,7 +18,7 @@ const classLevelRoutes = express.Router();
 classLevelRoutes
     .route("/")
     .post(authMiddleware, isAdminMiddleware,createClassLevel)
-    .get(authMiddleware, isAdminMiddleware ,getClassLevels);
+    .get(authMiddleware,getClassLevels);
 
 classLevelRoutes
     .route("/:id")

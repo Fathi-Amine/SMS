@@ -14,7 +14,7 @@ const subjectRoutes = express.Router();
 
 subjectRoutes.post("/:programID", authMiddleware, isAdminMiddleware, createSubject);
 
-subjectRoutes.get("/", authMiddleware, isAdminMiddleware, getSubjects);
+subjectRoutes.get("/", authMiddleware, getSubjects);
 
 subjectRoutes.get("/:id", authMiddleware, isAdminMiddleware, getProgram);
 subjectRoutes.put("/:id", authMiddleware, isAdminMiddleware, updateSubject);
