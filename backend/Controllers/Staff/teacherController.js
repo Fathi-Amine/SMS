@@ -1,6 +1,6 @@
 const AysncHandler = require("express-async-handler");
 const Teacher = require("../../Models/Staff/Teacher");
-const { genPassword, validPassword } = require("../../utils/authUtils");
+const { genPassword, validPassword } = require("../../Utils/authUtils");
 const Token = require("../../Models/Global/Token");
 const {attachCookieToResponse} = require("../../Utils/authUtils");
 const crypto = require("crypto");
