@@ -11,7 +11,10 @@ const examApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         getExam: builder.query({
-            query: (id) => `exams/${id}`,
+            query: (id) => ({
+                url: `${EXAM_URL}/${id}`,
+                method: 'GET'
+            }),
         }),
         createExam: builder.mutation({
             query: (body) => ({

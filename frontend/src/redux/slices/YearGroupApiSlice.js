@@ -17,6 +17,14 @@ export const yearGroupApiSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        getGroup: builder.query({
+            query(id) {
+                return {
+                    url: `${YEAR_GROUP_URL}/${id}`,
+                    method: 'GET'
+                }
+            }
+        }),
         updateYearGroup: builder.mutation({
             query:(data)=>({
                 url: `${YEAR_GROUP_URL}/update-year-group`,
@@ -34,4 +42,4 @@ export const yearGroupApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useAddYearGroupMutation, useGetAllYearGroupsQuery, useUpdateYearGroupMutation, useDeleteYearGroupMutation} = yearGroupApiSlice;
+export const {useAddYearGroupMutation, useGetAllYearGroupsQuery, useGetGroupQuery, useUpdateYearGroupMutation, useDeleteYearGroupMutation} = yearGroupApiSlice;
