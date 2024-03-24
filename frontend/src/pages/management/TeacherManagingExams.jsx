@@ -6,6 +6,7 @@ import {useGetExamQuery} from "../../redux/slices/examApiSlice.js";
 import academicYear from "../academicYear.jsx";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
+import {useGetAllAcademicTermsQuery} from "../../redux/slices/academicTermSlice.js";
 
 const TeacherManagingExams = () => {
     const [formData, setFormData] = useState({
@@ -47,7 +48,7 @@ const TeacherManagingExams = () => {
         }
     }, [academicYearData, academicYearSuccess]);
 
-    const {data:academicTermData, isLoading:academicTermLoading, isError:academicTermError, isSuccess:academicTermSuccess} = useGetAllAcademicYearsQuery()
+    const {data:academicTermData, isLoading:academicTermLoading, isError:academicTermError, isSuccess:academicTermSuccess} = useGetAllAcademicTermsQuery()
     useEffect(() => {
         if (academicTermSuccess) {
             setAcademicTerms(academicTermData.data)
@@ -81,13 +82,21 @@ const TeacherManagingExams = () => {
         }
     }, [examData,isSuccess]);
 
+    const formatDate = (dateString) => {
+        const dateObject = new Date(dateString);
+        const year = dateObject.getFullYear();
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // months are 0-indexed in JavaScript
+        const day = String(dateObject.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     /*const subject = subjects.find(sub => sub._id === exam.subject);
     const program = programs.find(prog => prog._id === exam.program);*/
    /* console.log(program)
     console.log(subject)*/
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("submitted")
+        console.log(formData)
     }
     return (
         <>
@@ -127,9 +136,8 @@ const TeacherManagingExams = () => {
                                         <div className="">
                                             <input
                                                 value={formData.duration}
-                                                disabled={true}
-                                                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                                type="email"
+                                                onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                                                type="text"
                                                 min="0"
                                                 id="last-name"
                                                 autoComplete="family-name"
@@ -138,13 +146,13 @@ const TeacherManagingExams = () => {
                                     </div>
                                     <div className="sm:col-span-3">
                                         <label
-                                            className="block text-sm font-medium leading-6 text-gray-900">Duration</label>
+                                            className="block text-sm font-medium leading-6 text-gray-900">Exam
+                                            Type</label>
                                         <div className="">
                                             <input
                                                 value={formData.examType}
-                                                disabled={true}
                                                 onChange={(e) => setFormData({...formData, examType: e.target.value})}
-                                                type="email"
+                                                type="text"
                                                 min="0"
                                                 id="last-name"
                                                 autoComplete="family-name"
@@ -153,13 +161,12 @@ const TeacherManagingExams = () => {
                                     </div>
                                     <div className="sm:col-span-3">
                                         <label
-                                            className="block text-sm font-medium leading-6 text-gray-900">Duration</label>
+                                            className="block text-sm font-medium leading-6 text-gray-900">Status</label>
                                         <div className="">
                                             <input
                                                 value={formData.examStatus}
-                                                disabled={true}
                                                 onChange={(e) => setFormData({...formData, examStatus: e.target.value})}
-                                                type="email"
+                                                type="text"
                                                 min="0"
                                                 id="last-name"
                                                 autoComplete="family-name"
@@ -171,14 +178,149 @@ const TeacherManagingExams = () => {
                                             className="block text-sm font-medium leading-6 text-gray-900">Duration</label>
                                         <div className="">
                                             <input
-                                                value={formData.duration}
-                                                disabled={true}
-                                                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                                type="email"
+                                                value={formatDate(formData.examDate)}
+                                                onChange={(e) => setFormData({...formData, examDate: e.target.value})}
+                                                type="date"
                                                 min="0"
                                                 id="last-name"
                                                 autoComplete="family-name"
                                                 className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"/>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Pass
+                                            Mark</label>
+                                        <div className="">
+                                            <input
+                                                value={formData.passMark}
+                                                onChange={(e) => setFormData({...formData, passMark: e.target.value})}
+                                                type="text"
+                                                min="0"
+                                                id="last-name"
+                                                autoComplete="family-name"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"/>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Total
+                                            Mark</label>
+                                        <div className="">
+                                            <input
+                                                value={formData.totalMark}
+                                                onChange={(e) => setFormData({...formData, totalMark: e.target.value})}
+                                                type="text"
+                                                min="0"
+                                                id="last-name"
+                                                autoComplete="family-name"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"/>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Academic Term</label>
+                                        <div className="">
+                                            <select
+                                                value={formData.academicTerm}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    academicTerm: e.target.value
+                                                })}
+                                                id="academic-term"
+                                                name="academic-term"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
+                                                <option>select your academic term</option>
+                                                {academicTerms.map((academicterm, index) => (
+                                                    <option key={index}
+                                                            value={academicterm._id}>{academicterm.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Academic Year</label>
+                                        <div className="">
+                                            <select
+                                                value={formData.academicYear}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    academicYear: e.target.value
+                                                })}
+                                                id="academic-year"
+                                                name="academic-year"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
+                                                <option>select your academic year</option>
+                                                {academicYears.map((academicyear, index) => (
+                                                    <option key={index}
+                                                            value={academicyear._id}>{academicyear.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Class Level</label>
+                                        <div className="">
+                                            <select
+                                                value={formData.classLevel}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    classLevel: e.target.value
+                                                })}
+                                                id="class-level"
+                                                name="class-level"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
+                                                <option>select your class level</option>
+                                                {classes.map((classlevel, index) => (
+                                                    <option key={index}
+                                                            value={classlevel._id}>{classlevel.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-3">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Subject</label>
+                                        <div className="">
+                                            <select
+                                                value={formData.subject}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    subject: e.target.value
+                                                })}
+                                                id="subject"
+                                                name="subject"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
+                                                <option>select your subject</option>
+                                                {subjects.map((subject, index) => (
+                                                    <option key={index}
+                                                            value={subject._id}>{subject.name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="sm:col-span-6">
+                                        <label
+                                            className="block text-sm font-medium leading-6 text-gray-900">Program</label>
+                                        <div className="">
+                                            <select
+                                                value={formData.program}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    program: e.target.value
+                                                })}
+                                                id="program"
+                                                name="program"
+                                                className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
+                                                <option>select your program</option>
+                                                {programs.map((program, index) => (
+                                                    <option key={index}
+                                                            value={program._id}>{program.name}</option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </div>
 

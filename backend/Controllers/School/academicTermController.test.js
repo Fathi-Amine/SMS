@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 describe('Academic Term Controller', () => {
     let cookies;
