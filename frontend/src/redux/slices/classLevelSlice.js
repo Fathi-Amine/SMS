@@ -24,17 +24,16 @@ export const classLevelSlice = apiSlice.injectEndpoints({
             })
         }),
         updateClassLevel: builder.mutation({
-            query:(data)=>({
-                url: `${CLASS_LEVEL_URL}/update-class-level`,
-                method: 'PATCH',
+            query:({data, id})=>({
+                url: `${CLASS_LEVEL_URL}/${id}`,
+                method: 'PUT',
                 body: data
             })
         }),
         deleteClassLevel: builder.mutation({
-            query:(data)=>({
-                url: `${CLASS_LEVEL_URL}/delete-class-level`,
+            query:({id})=>({
+                url: `${CLASS_LEVEL_URL}/${id}`,
                 method: 'DELETE',
-                body: data
             })
         }),
     })

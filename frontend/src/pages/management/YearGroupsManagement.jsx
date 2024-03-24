@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetGroupQuery} from "../../redux/slices/YearGroupApiSlice.js";
+import {
+    useDeleteYearGroupMutation,
+    useGetGroupQuery,
+    useUpdateYearGroupMutation
+} from "../../redux/slices/YearGroupApiSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
 
 const YearGroupsManagement = () => {
@@ -29,14 +33,30 @@ const YearGroupsManagement = () => {
             console.log(formData)
         }
     }, [groupData, isSuccess]);
-    const handleSubmit = (e) => {
+
+    const [updateGroupYear, {isLoading: updateLoading, isSuccess: updateSuccess, isError: updateError}] = useUpdateYearGroupMutation()
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("submitted")
+        try {
+            const res = await updateGroupYear({data: formData, id: groupId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteYearGroup = (e) => {
+    const [deleteGroupYear, {isLoading: deleteLoading, isSuccess: deleteSuccess, isError: deleteError}] = useDeleteYearGroupMutation()
+
+    const handleDeleteYearGroup = async (e) => {
         e.preventDefault();
-        console.log("deleted")
+        try {
+            const res = await deleteGroupYear({id: groupId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
     return (
         <>
@@ -61,11 +81,11 @@ const YearGroupsManagement = () => {
                                 </div>
                                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="sm:col-span-6">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">Teacher
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">
                                             Name</label>
                                         <div className="">
                                             <input
-                                                value={formData.name}
+                                                value={formData?.name}
                                                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                                                 type="text" id="first-name"
                                                 autoComplete="given-name"
@@ -80,7 +100,7 @@ const YearGroupsManagement = () => {
                                         <div className="">
                                             <select
                                                 className={"block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"}
-                                                value={formData.academicYear}
+                                                value={formData?.academicYear}
                                                 onChange={(e) => setFormData({
                                                     ...formData,
                                                     academicYear: e.target.value
@@ -88,7 +108,7 @@ const YearGroupsManagement = () => {
                                             >
                                                 <option>Change the academic year</option>
                                                 {academicYears.map((academicYear) => (
-                                                    <option key={academicYear.id} value={academicYear.id}>{academicYear.name}</option>
+                                                    <option key={academicYear?._id} value={academicYear?._id}>{academicYear?.name}</option>
                                                 ))}
                                             </select>
                                         </div>

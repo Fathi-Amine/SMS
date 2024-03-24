@@ -24,6 +24,13 @@ export const studentApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        updateStudentByAdmin: builder.mutation({
+            query:({data, id})=>({
+                url: `${STUDENT_URL}/update/${id}/admin`,
+                method: 'PUT',
+                body: data
+            })
+        }),
         deleteStudent: builder.mutation({
             query:(data)=>({
                 url: `${STUDENT_URL}/delete-student`,
@@ -40,4 +47,4 @@ export const studentApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useAddStudentMutation, useGetAllStudentsQuery, useUpdateStudentMutation, useDeleteStudentMutation, useGetStudentByAdminQuery} = studentApiSlice;
+export const {useAddStudentMutation, useGetAllStudentsQuery, useUpdateStudentMutation, useUpdateStudentByAdminMutation, useDeleteStudentMutation, useGetStudentByAdminQuery} = studentApiSlice;

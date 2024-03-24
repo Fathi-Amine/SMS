@@ -26,17 +26,20 @@ export const yearGroupApiSlice = apiSlice.injectEndpoints({
             }
         }),
         updateYearGroup: builder.mutation({
-            query:(data)=>({
-                url: `${YEAR_GROUP_URL}/update-year-group`,
-                method: 'PATCH',
-                body: data
-            })
+            query:({data, id})=>{
+                console.log("id", id);
+                console.log("data", data);
+                return {
+                    url: `${YEAR_GROUP_URL}/${id}`,
+                    method: 'PUT',
+                    body: data
+                }
+            }
         }),
         deleteYearGroup: builder.mutation({
-            query:(data)=>({
-                url: `${YEAR_GROUP_URL}/delete-year-group`,
+            query:({id})=>({
+            url: `${YEAR_GROUP_URL}/${id}`,
                 method: 'DELETE',
-                body: data
             })
         }),
     })

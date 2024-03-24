@@ -24,17 +24,16 @@ export const academicTermSlice = apiSlice.injectEndpoints({
             })
         }),
         updateAcademicTerm: builder.mutation({
-            query:(data)=>({
-                url: `${ACADEMIC_TERM_URL}/update-academic-term`,
-                method: 'PATCH',
+            query:({data,id})=>({
+                url: `${ACADEMIC_TERM_URL}/${id}`,
+                method: 'PUT',
                 body: data
             })
         }),
         deleteAcademicTerm: builder.mutation({
-            query:(data)=>({
-                url: `${ACADEMIC_TERM_URL}/delete-academic-term`,
+            query:({id})=>({
+                url: `${ACADEMIC_TERM_URL}/${id}`,
                 method: 'DELETE',
-                body: data
             })
         }),
     })

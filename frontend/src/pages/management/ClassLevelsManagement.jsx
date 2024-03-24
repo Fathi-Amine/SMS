@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetClassLevelQuery} from "../../redux/slices/classLevelSlice.js";
+import {
+    useDeleteClassLevelMutation,
+    useGetClassLevelQuery,
+    useUpdateClassLevelMutation
+} from "../../redux/slices/classLevelSlice.js";
 
 const ClassLevelsManagement = () => {
     const [formData, setFormData] = useState({
@@ -17,14 +21,30 @@ const ClassLevelsManagement = () => {
             setFormData(classLevel.data)
         }
     }, [classLevel, isSuccess]);
-    const handleSubmit = (e) => {
+
+    const [updateClassLevel, {data, isLoading: isUpdating, isSuccess: isUpdated, isError: updateError}] = useUpdateClassLevelMutation();
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("submitted")
+        try {
+            const res = await updateClassLevel({id: classLevelId, data: formData}).unwrap();
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteClass = (e) => {
+    const [deleteClassLevel, {data: deleteData, isLoading: isDeleting, isSuccess: isDeleted, isError: deleteError}] = useDeleteClassLevelMutation();
+
+    const handleDeleteClass = async (e) => {
         e.preventDefault();
-        console.log("deleted")
+        try {
+            const res = await deleteClassLevel({id: classLevelId}).unwrap();
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
     return (
         <>
@@ -49,12 +69,11 @@ const ClassLevelsManagement = () => {
                                 </div>
                                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="sm:col-span-6">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">Teacher
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">
                                             Name</label>
                                         <div className="">
                                             <input
                                                 value={formData.name}
-                                                disabled={true}
                                                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                                                 type="text" id="first-name"
                                                 autoComplete="given-name"

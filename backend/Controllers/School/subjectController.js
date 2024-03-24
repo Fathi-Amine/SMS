@@ -56,8 +56,8 @@ exports.updateSubject = AsyncHandler(async (req, res) => {
     const { name, description, academicTerm } = req.body;
     const updateData = {};
 
-    if (name) { // Update name only if provided
-        const existingSubject = await Subject.findOne({ name, _id: { $ne: req.params.id } }); // Exclude current subject
+    if (name) {
+        const existingSubject = await Subject.findOne({ name, _id: { $ne: req.params.id } });
         if (existingSubject) {
             return res.status(400).json({ message: "Subject name already exists" });
         }

@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetAcademicYearQuery} from "../../redux/slices/academicYearSlice.js";
+import {
+    useDeleteAcademicYearMutation,
+    useGetAcademicYearQuery,
+    useUpdateAcademicYearMutation
+} from "../../redux/slices/academicYearSlice.js";
 
 const AcademicYearsManagement = () => {
     const [formData, setFormData] = useState({
@@ -19,19 +23,37 @@ const AcademicYearsManagement = () => {
         }
     }, [academicYearData, isSuccess]);
     console.log(academicYearId)
-    const handleSubmit = (e) => {
+
+    const [updateAcademicYear, {data, isLoading: isUpdating, isSuccess: isUpdated, isError: updateError}] = useUpdateAcademicYearMutation()
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('submitted')
-    }
-    const formatDate = (date) => {
-        const dateObject = new Date(date);
-        return dateObject.toLocaleDateString()
+        try {
+            const res = await updateAcademicYear({id: academicYearId, data: formData}).unwrap();
+            const {message} = res;
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteAcademicYear = (e) => {
-        e.preventDefault();
-        console.log('delete')
+    const [deleteAcademicYear, {data: deleteData, isLoading: isDeleting, isSuccess: isDeleted, isError: deleteError}] = useDeleteAcademicYearMutation()
+    const formatDate = (dateString) => {
+        const dateObject = new Date(dateString);
+        const year = dateObject.getFullYear();
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // months are 0-indexed in JavaScript
+        const day = String(dateObject.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
+    const handleDeleteAcademicYear = async(e) => {
+        e.preventDefault();
+        try {
+            const res = await deleteAcademicYear({id: academicYearId}).unwrap();
+            const {message} = res;
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
     return (
         <>
@@ -55,7 +77,7 @@ const AcademicYearsManagement = () => {
                                 </div>
                                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="sm:col-span-6">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">Teacher
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">
                                             Name</label>
                                         <div className="">
                                             <input
@@ -69,13 +91,13 @@ const AcademicYearsManagement = () => {
                                     </div>
 
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">Teacher
-                                            Name</label>
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">From</label>
                                         <div className="">
                                             <input
                                                 value={formatDate(formData.fromYear)}
                                                 onChange={(e) => setFormData({...formData, fromYear: e.target.value})}
-                                                type="text" id="first-name"
+                                                type="date"
+                                                id="first-name"
                                                 autoComplete="given-name"
                                                 className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"/>
                                         </div>
@@ -83,13 +105,13 @@ const AcademicYearsManagement = () => {
                                     </div>
 
                                     <div className="sm:col-span-3">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">Teacher
-                                            Name</label>
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">To</label>
                                         <div className="">
                                             <input
                                                 value={formatDate(formData.toYear)}
                                                 onChange={(e) => setFormData({...formData, toYear: e.target.value})}
-                                                type="text" id="first-name"
+                                                type="date"
+                                                id="first-name"
                                                 autoComplete="given-name"
                                                 className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"/>
                                         </div>

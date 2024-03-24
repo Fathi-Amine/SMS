@@ -36,7 +36,20 @@ export const teacherApiSlice = apiSlice.injectEndpoints({
                 method:'GET'
             })
         }),
+        updateTeacherByAdmin:builder.mutation({
+            query:({data, teacherID})=>{
+                console.log("Data:", data);
+                console.log("Teacher ID:", teacherID)
+                return {
+                    url: `${TEACHERS_URL}/update/${teacherID}/admin`,
+                    method: 'PUT',
+                    body: data
+                }
+            }
+        }),
+
+
     })
 })
 
-export const {useLoginTeacherMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery} = teacherApiSlice;
+export const {useLoginTeacherMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery, useUpdateTeacherByAdminMutation} = teacherApiSlice;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetStudentByAdminQuery} from "../../redux/slices/studentApiSlice.js";
+import {useGetStudentByAdminQuery, useUpdateStudentByAdminMutation} from "../../redux/slices/studentApiSlice.js";
 import {useGetAllProgramsQuery} from "../../redux/slices/programApiSlice.js";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
@@ -62,16 +62,18 @@ const StudentsManagement = () => {
         setFormData({ ...formData, isSuspended: e.target.value === 'true'});
     }
 
-    const handleSubmit = (e)=> {
+    const [updateStudent, {data, isLoading: updateStudentLoading, isSuccess: updateStudentSuccess, isError: updateStudentError}] = useUpdateStudentByAdminMutation();
+    const handleSubmit = async (e)=> {
         e.preventDefault()
-        console.log(formData)
-        console.log("submit")
+        try {
+            const res = await updateStudent({data: formData, id: studentId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteStudent = (e) => {
-        e.preventDefault()
-        console.log("delete")
-    }
     return (
         <>
             {/* edit modal */}
@@ -89,9 +91,6 @@ const StudentsManagement = () => {
                                         <p className=" text-sm text-gray-600 mt-2">You need to add a good Informations
                                             for a good results.</p>
                                     </div>
-                                    <button onClick={handleDeleteStudent}
-                                            className="text-sm font-semibold leading-6 text-white border-1 p-2 rounded bg-red-500">Delete
-                                    </button>
                                 </div>
                                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="sm:col-span-6">

@@ -24,19 +24,25 @@ export const programApiSlice = apiSlice.injectEndpoints({
             })
         }),
         updateProgram: builder.mutation({
-            query:(data)=>({
-                url: `${PROGRAM_URL}/update-program`,
-                method: 'PATCH',
+            query:({data,id})=>({
+                url: `${PROGRAM_URL}/${id}`,
+                method: 'PUT',
                 body: data
             })
         }),
         deleteProgram: builder.mutation({
-            query:(data)=>({
-                url: `${PROGRAM_URL}/delete-program`,
+            query:( {id})=>({
+                url: `${PROGRAM_URL}/${id}`,
                 method: 'DELETE',
-                body: data
             })
         }),
+        addSubjectToProgram: builder.mutation({
+            query:({data,id})=>({
+                url: `${PROGRAM_URL}/${id}/subjects`,
+                method: 'PUT',
+                body: data
+            })
+        })
     })
 })
 

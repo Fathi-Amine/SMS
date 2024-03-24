@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetSubjectQuery} from "../../redux/slices/subjectApiSlice.js";
+import {
+    useDeleteSubjectMutation,
+    useGetSubjectQuery,
+    useUpdateSubjectMutation
+} from "../../redux/slices/subjectApiSlice.js";
 import {useGetAllAcademicTermsQuery} from "../../redux/slices/academicTermSlice.js";
 
 const SubjectManagement = () => {
@@ -33,14 +37,29 @@ const SubjectManagement = () => {
         }
     }, [subjectData, isSuccess]);
 
-    const handleSubmit = (e) => {
+    const [updateSubject, {data, isLoading: updateLoading, isSuccess: updateSuccess, isError: updateError}] = useUpdateSubjectMutation()
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log("submitted")
+        try {
+            const res = await updateSubject({data:formData, id:subjectId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteSubject = (e) => {
+    const [deleteSubject, {data: deleteData, isLoading: deleteLoading, isSuccess: deleteSuccess, isError: deleteError}] = useDeleteSubjectMutation()
+
+    const handleDeleteSubject = async (e) => {
         e.preventDefault()
-        console.log("deleted")
+        try {
+            const res = await deleteSubject({id:subjectId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
     return (
         <>
@@ -53,7 +72,7 @@ const SubjectManagement = () => {
                             <div className="border-b border-gray-900/10 pb-2">
                                 <div className={"flex justify-between items-center"}>
                                     <div>
-                                        <h2 className="text-base font-semibold leading-7 text-gray-900">Program
+                                        <h2 className="text-base font-semibold leading-7 text-gray-900">Subject
                                             Information
                                         </h2>
                                         <p className=" text-sm text-gray-600 mt-2">You need to add a good Informations
@@ -65,7 +84,7 @@ const SubjectManagement = () => {
                                 </div>
                                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     <div className="sm:col-span-6">
-                                        <label className="block text-sm font-medium leading-6 text-gray-900">Program
+                                        <label className="block text-sm font-medium leading-6 text-gray-900">Subject
                                             Name</label>
                                         <div className="">
                                             <input
@@ -83,9 +102,10 @@ const SubjectManagement = () => {
                                             className="block text-sm font-medium leading-6 text-gray-900">Duration</label>
                                         <div className="">
                                             <input
+                                                disabled={true}
                                                 value={formData.duration}
                                                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                                type="email"
+                                                type="text"
                                                 min="0"
                                                 id="last-name"
                                                 autoComplete="family-name"

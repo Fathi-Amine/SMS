@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetProgramQuery} from "../../redux/slices/programApiSlice.js";
+import {
+    useDeleteProgramMutation,
+    useGetProgramQuery,
+    useUpdateProgramMutation
+} from "../../redux/slices/programApiSlice.js";
 import {useGetAllSubjectsQuery} from "../../redux/slices/subjectApiSlice.js";
 
 const ProgramsManagement = () => {
@@ -9,6 +13,7 @@ const ProgramsManagement = () => {
         name: "",
         duration: "",
     });
+    const [subject, setSubject] = useState("");
 
     const [subjects, setSubjects] = useState([]);
     const {data: subjectsData, isLoading: subjectsLoading, isError: subjectsError, isSuccess: subjectsSuccess} = useGetAllSubjectsQuery();
@@ -28,19 +33,45 @@ const ProgramsManagement = () => {
             console.log(formData)
         }
     }, [programData, isSuccess]);
-    const handleSubmit = (e) => {
+
+    const [updateProgram, {data, error, isSuccess: updateSuccess, isLoading: updateLoading}] = useUpdateProgramMutation();
+    const handleSubmit =async (e) => {
         e.preventDefault();
+        try {
+            const res = await updateProgram({id: programId, data: subject}).unwrap();
+            const {message} = res;
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
+
         console.log("submitted")
     }
 
-    const handleAddSubjectSubmit = (e) => {
+    const [addSubjectToProgram, {data: addSubjectData, error: addSubjectError, isSuccess: addSubjectSuccess, isLoading: addSubjectLoading}] = useUpdateProgramMutation();
+
+    const handleAddSubjectSubmit = async (e) => {
         e.preventDefault();
-        console.log("add subject submitted")
+        try {
+            const res = await addSubjectToProgram({id: programId, data: formData}).unwrap();
+            const {message} = res;
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteProgram = (e) => {
+    const [deleteProgram, {data: deleteData, error: deleteError, isSuccess: deleteSuccess, isLoading: deleteLoading}] = useDeleteProgramMutation();
+
+    const handleDeleteProgram = async(e) => {
         e.preventDefault();
-        console.log("delete program")
+        try {
+            const res = await deleteProgram({id: programId}).unwrap();
+            const {message} = res;
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
     return (
         <>
@@ -148,7 +179,7 @@ const ProgramsManagement = () => {
                                                 className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
                                                 <option>select your subject</option>
                                                 {subjects.map((subject, index) => (
-                                                    <option key={index} value={subject._id}>{subject.name}</option>
+                                                    <option key={index} value={subject.name}>{subject.name}</option>
                                                 ))}
                                             </select>
                                         </div>

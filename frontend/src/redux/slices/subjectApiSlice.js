@@ -24,17 +24,16 @@ export const subjectApiSlice = apiSlice.injectEndpoints({
             })
         }),
         updateSubject: builder.mutation({
-            query:(data)=>({
-                url: `${SUBJECT_URL}/update-subject`,
-                method: 'PATCH',
+            query:({data, id})=>({
+                url: `${SUBJECT_URL}/${id}`,
+                method: 'PUT',
                 body: data
             })
         }),
         deleteSubject: builder.mutation({
-            query:(data)=>({
-                url: `${SUBJECT_URL}/delete-subject`,
+            query:({id})=>({
+                url: `${SUBJECT_URL}/${id}`,
                 method: 'DELETE',
-                body: data
             })
         }),
     })

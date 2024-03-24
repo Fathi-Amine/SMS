@@ -157,7 +157,6 @@ exports.adminUpdateStudent = AysncHandler(async (req, res) => {
     const { classLevels, academicYear, program, prefectName } =
         req.body;
 
-    //find the student by id
     const studentFound = await Student.findById(req.params.studentId);
     if (!studentFound) {
         throw new Error("Student not found");
@@ -180,7 +179,7 @@ exports.adminUpdateStudent = AysncHandler(async (req, res) => {
             new: true,
         }
     );
-    //send response
+
     res.status(200).json({
         status: "success",
         data: studentUpdated,

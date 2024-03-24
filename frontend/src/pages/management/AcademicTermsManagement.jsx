@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetAcademicTermQuery} from "../../redux/slices/academicTermSlice.js";
+import {
+    useDeleteAcademicTermMutation,
+    useGetAcademicTermQuery,
+    useUpdateAcademicTermMutation
+} from "../../redux/slices/academicTermSlice.js";
 
 const AcademicTermsManagement = () => {
     const [formData, setFormData] = useState({
@@ -19,15 +23,31 @@ const AcademicTermsManagement = () => {
             console.log(formData)
         }
     }, [academicTermData, isSuccess]);
-    const handleSubmit = (e) => {
+
+    const [updateAcademicTerm, {data, error, isLoading: isUpdating}] = useUpdateAcademicTermMutation()
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log("submitted")
+        try {
+            const res = await updateAcademicTerm({data: formData, id: academicTermId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
-    const handleDeleteATerm = (e) => {
+    const [deleteAcademicTerm, {data: deleteData, error: deleteError, isLoading: isDeleting}] = useDeleteAcademicTermMutation()
+
+    const handleDeleteATerm =async (e) => {
 
         e.preventDefault()
-        console.log("deleted")
+        try {
+            const res = await deleteAcademicTerm({id: academicTermId}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
     return (
         <>
@@ -73,9 +93,10 @@ const AcademicTermsManagement = () => {
                                             className="block text-sm font-medium leading-6 text-gray-900">Duration</label>
                                         <div className="">
                                             <input
+                                                disabled={true}
                                                 value={formData.duration}
                                                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                                type="email"
+                                                type="tesct"
                                                 min="0"
                                                 id="last-name"
                                                 autoComplete="family-name"

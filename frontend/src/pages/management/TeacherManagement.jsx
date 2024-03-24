@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {useGetTeacherByIdQuery} from "../../redux/slices/teacherSlice.js";
+import {useGetTeacherByIdQuery, useUpdateTeacherByAdminMutation} from "../../redux/slices/teacherSlice.js";
 import {useGetAllProgramsQuery} from "../../redux/slices/programApiSlice.js";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
@@ -13,12 +13,14 @@ const TeacherManagement = () => {
         isWitdrawn: false,
         isSuspended: false,
         applicationStatus: '',
-        subjects: [],
+        subject: [],
+        assignedSubject: '',
         program: '',
         classLevel: '',
         academicYear: '',
         teacherId: ''
     });
+
     const [programs, setPrograms] = useState([]);
     const [classLevels, setClassLevels] = useState([]);
     const [academicYears, setAcademicYears] = useState([]);
@@ -56,9 +58,9 @@ const TeacherManagement = () => {
 
 
 
-    const teacherId = useParams().id;
+    const teacherID = useParams().id;
 
-    const { data:teacher, isLoading, isError, isSuccess } = useGetTeacherByIdQuery(teacherId);
+    const { data:teacher, isLoading, isError, isSuccess } = useGetTeacherByIdQuery(teacherID);
 
     useEffect(() => {
         // fetch teacher by id
@@ -78,9 +80,18 @@ const TeacherManagement = () => {
         setFormData({ ...formData, isSuspended: e.target.value === 'true'});
     }
 
-    const handleSubmit = (e) => {
+    const [updateTeacher, {data, error, isSuccess: updateSuccess}] = useUpdateTeacherByAdminMutation();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
+        try {
+            console.log(formData, teacherID)
+            const res = await updateTeacher({data:formData,teacherID}).unwrap();
+            const {message} = res;
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
     }
 
 
@@ -106,9 +117,6 @@ const TeacherManagement = () => {
                                         <p className=" text-sm text-gray-600 mt-2">You need to add a good Informations
                                             for a good results.</p>
                                     </div>
-                                    <button onClick={handleDeleteTeacher}
-                                            className="text-sm font-semibold leading-6 text-white border-1 p-2 rounded bg-red-500">Delete
-                                    </button>
                                 </div>
                                 <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                 <div className="sm:col-span-6">
@@ -239,7 +247,7 @@ const TeacherManagement = () => {
                                                 className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
                                                 <option>select your program</option>
                                                 {programs.map((program, index) => (
-                                                    <option key={index} value={program._id}>{program.name}</option>
+                                                    <option key={index} value={program.name}>{program.name}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -260,7 +268,7 @@ const TeacherManagement = () => {
                                                 <option>select your program</option>
                                                 {classLevels.map((classLevel, index) => (
                                                     <option key={index}
-                                                            value={classLevel._id}>{classLevel.name}</option>
+                                                            value={classLevel.name}>{classLevel.name}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -281,7 +289,7 @@ const TeacherManagement = () => {
                                                 <option>select your program</option>
                                                 {academicYears.map((academicYear, index) => (
                                                     <option key={index}
-                                                            value={academicYear._id}>{academicYear.name}</option>
+                                                            value={academicYear.name}>{academicYear.name}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -292,14 +300,14 @@ const TeacherManagement = () => {
                                             className="block text-sm font-medium leading-6 text-gray-900">Subjects</label>
                                         <div className="">
                                             <select
-                                                value={formData.subject}
-                                                onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                                                value={formData.assignedSubject}
+                                                onChange={(e) => setFormData({...formData, assignedSubject: e.target.value})}
                                                 id="subject"
                                                 name="subject"
                                                 className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset sm:max-w-xs sm:text-sm sm:leading-6">
                                                 <option>select your subject</option>
                                                 {filteredSubjects.map((subject, index) => (
-                                                    <option key={index} value={subject._id}>{subject.name}</option>
+                                                    <option key={index} value={subject.name}>{subject.name}</option>
                                                 ))}
                                             </select>
                                         </div>

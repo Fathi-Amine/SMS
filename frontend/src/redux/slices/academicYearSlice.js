@@ -24,17 +24,16 @@ export const academicYearApiSlice = apiSlice.injectEndpoints({
             })
         }),
         updateAcademicYear: builder.mutation({
-            query:(data)=>({
-                url: `${ACADEMIC_YEARS_URL}/update-academic-year`,
-                method: 'PATCH',
+            query:({data,id})=>({
+                url: `${ACADEMIC_YEARS_URL}/${id}`,
+                method: 'PUT',
                 body: data
             })
         }),
         deleteAcademicYear: builder.mutation({
-            query:(data)=>({
-                url: `${ACADEMIC_YEARS_URL}/delete-academic-year`,
+            query:({id})=>({
+                url: `${ACADEMIC_YEARS_URL}/${id}`,
                 method: 'DELETE',
-                body: data
             })
         }),
     })

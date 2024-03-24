@@ -159,7 +159,7 @@ exports.teacherUpdateProfile = AysncHandler(async (req, res) => {
 
 
 exports.adminUpdateTeacher = AysncHandler(async (req, res) => {
-    const { program, classLevel, academicYear, subject } = req.body;
+    const { program, classLevel, academicYear, assignedSubject } = req.body;
     const updates = {};
     //if email is taken
     const teacherFound = await Teacher.findById(req.params.teacherID);
@@ -172,6 +172,7 @@ exports.adminUpdateTeacher = AysncHandler(async (req, res) => {
     }
     //assign a program
     if (program) {
+        console.log(program)
         const programExists = await Program.findOne({ name: program });
         if (!programExists) {
             throw new Error("Action denied, Program doesn't exist");
@@ -198,8 +199,8 @@ exports.adminUpdateTeacher = AysncHandler(async (req, res) => {
     }
 
     //assign subject
-    if (subject) {
-        const subjectExists = await Subject.findOne({name:subject});
+    if (assignedSubject) {
+        const subjectExists = await Subject.findOne({name:assignedSubject});
         if (!subjectExists){
             throw new Error("Action denied, Subject doesn't exist");
         }
