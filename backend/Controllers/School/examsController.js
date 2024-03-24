@@ -89,9 +89,11 @@ exports.updateExam = AysncHandler(async (req, res) => {
         examTime,
         examType,
         createdBy,
+        examStatus,
         academicYear,
         classLevel,
     } = req.body;
+    console.log()
     //check name exists
     const examFound = await Exam.findOne({ name, _id: { $ne: req.params.id } });
     if (examFound) {
@@ -111,6 +113,7 @@ exports.updateExam = AysncHandler(async (req, res) => {
             examTime,
             examType,
             academicYear,
+            examStatus,
             classLevel,
             createdBy: req.user.id,
         },

@@ -638,6 +638,7 @@ export const links = [
       },
     ],
   },
+
 ];
 
 export const teacherLinks = [
@@ -653,7 +654,16 @@ export const teacherLinks = [
             icon:<AiOutlineQuestionCircle />,
           }
         ]
-    }
+    },
+  {
+    title: 'Apps',
+    links: [
+      {
+        name: 'data-entry',
+        icon: <BsDatabaseAdd />,
+      },
+    ]
+  },
     ];
 
 export const cartData = [

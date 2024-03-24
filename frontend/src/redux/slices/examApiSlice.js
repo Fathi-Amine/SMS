@@ -18,14 +18,14 @@ const examApiSlice = apiSlice.injectEndpoints({
         }),
         createExam: builder.mutation({
             query: (body) => ({
-                url: "exams",
+                url: `${EXAM_URL}`,
                 method: "POST",
                 body,
             }),
         }),
         updateExam: builder.mutation({
             query: ({id, body}) => ({
-                url: `exams/${id}`,
+                url: `${EXAM_URL}/${id}`,
                 method: "PUT",
                 body,
             }),

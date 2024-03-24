@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useGetAllSubjectsQuery} from "../../redux/slices/subjectApiSlice.js";
 import {useGetAllProgramsQuery} from "../../redux/slices/programApiSlice.js";
-import {useGetExamQuery} from "../../redux/slices/examApiSlice.js";
+import {useGetExamQuery, useUpdateExamMutation} from "../../redux/slices/examApiSlice.js";
 import academicYear from "../academicYear.jsx";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
@@ -89,14 +89,25 @@ const TeacherManagingExams = () => {
         const day = String(dateObject.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
+    const [updateExam, {isLoading: updateLoding}] = useUpdateExamMutation();
 
     /*const subject = subjects.find(sub => sub._id === exam.subject);
     const program = programs.find(prog => prog._id === exam.program);*/
    /* console.log(program)
     console.log(subject)*/
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData)
+        // handle exam update here using rtk
+        try {
+            console.log(examId)
+            const res = await updateExam({id: examId, body: formData}).unwrap()
+            const {message} = res
+            console.log(message)
+        }catch (e) {
+            console.log(e)
+        }
+
     }
     return (
         <>
