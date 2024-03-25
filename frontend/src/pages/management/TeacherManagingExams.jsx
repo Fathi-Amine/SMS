@@ -7,6 +7,7 @@ import academicYear from "../academicYear.jsx";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
 import {useGetAllAcademicTermsQuery} from "../../redux/slices/academicTermSlice.js";
+import {toast} from "react-toastify";
 
 const TeacherManagingExams = () => {
     const [formData, setFormData] = useState({
@@ -103,6 +104,7 @@ const TeacherManagingExams = () => {
             console.log(examId)
             const res = await updateExam({id: examId, body: formData}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

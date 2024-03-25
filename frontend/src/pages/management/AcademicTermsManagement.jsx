@@ -5,6 +5,7 @@ import {
     useGetAcademicTermQuery,
     useUpdateAcademicTermMutation
 } from "../../redux/slices/academicTermSlice.js";
+import {toast} from "react-toastify";
 
 const AcademicTermsManagement = () => {
     const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ const AcademicTermsManagement = () => {
         try {
             const res = await updateAcademicTerm({data: formData, id: academicTermId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
@@ -44,6 +46,7 @@ const AcademicTermsManagement = () => {
         try {
             const res = await deleteAcademicTerm({id: academicTermId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

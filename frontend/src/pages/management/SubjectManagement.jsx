@@ -6,6 +6,7 @@ import {
     useUpdateSubjectMutation
 } from "../../redux/slices/subjectApiSlice.js";
 import {useGetAllAcademicTermsQuery} from "../../redux/slices/academicTermSlice.js";
+import {toast} from "react-toastify";
 
 const SubjectManagement = () => {
 
@@ -43,6 +44,7 @@ const SubjectManagement = () => {
         try {
             const res = await updateSubject({data:formData, id:subjectId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
@@ -56,6 +58,7 @@ const SubjectManagement = () => {
         try {
             const res = await deleteSubject({id:subjectId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

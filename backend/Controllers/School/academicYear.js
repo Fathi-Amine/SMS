@@ -7,7 +7,7 @@ const createAcademicYear = AsyncHandler(async (req, res) => {
     //check if exists
     const academicYear = await AcademicYear.findOne({ name });
     if (academicYear) {
-        throw new Error("Academic year already exists");
+        res.status(400).json({message:'Academic year already exists'})
     }
     //create
     const academicYearCreated = await AcademicYear.create({
@@ -29,7 +29,7 @@ const createAcademicYear = AsyncHandler(async (req, res) => {
 const getAcademicYears = AsyncHandler(async (req, res) => {
     const academicYears = await AcademicYear.find();
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Academic years fetched successfully",
         data: academicYears,
@@ -39,7 +39,7 @@ const getAcademicYears = AsyncHandler(async (req, res) => {
 const getAcademicYear = AsyncHandler(async (req, res) => {
     const academicYears = await AcademicYear.findById(req.params.id);
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Academic years fetched successfully",
         data: academicYears,
@@ -51,10 +51,10 @@ const updateAcademicYear = AsyncHandler(async (req, res) => {
     const academicYear = await AcademicYear.findById(req.params.id);
 
     // Check if the name has been changed and if it already exists
-    if (name !== academicYear.name) {
-        const createAcademicYearFound = await AcademicYear.findOne({ name });
-        if (createAcademicYearFound) {
-            throw new Error("Academic year already exists");
+    if (name) {
+        const yearExists  = await AcademicYear.findOne({ name, _id: { $ne: req.params.id } });
+        if (yearExists) {
+            return res.status(400).json({message:"Academic year already exists"});
         }
     }
 
@@ -65,7 +65,7 @@ const updateAcademicYear = AsyncHandler(async (req, res) => {
 
     await academicYear.save();
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Academic years updated successfully",
         data: academicYear,
@@ -75,7 +75,7 @@ const updateAcademicYear = AsyncHandler(async (req, res) => {
 const deleteAcademicYear = AsyncHandler(async (req, res) => {
     await AcademicYear.findByIdAndDelete(req.params.id);
 
-    res.status(201).json({
+    res.status(200).json({
         status: "success",
         message: "Academic year deleted successfully",
     });

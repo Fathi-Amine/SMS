@@ -8,6 +8,7 @@ import {useAddProgramMutation, useGetAllProgramsQuery} from "../redux/slices/pro
 import {useAddStudentMutation} from "../redux/slices/studentApiSlice.js";
 import {useAddSubjectMutation} from "../redux/slices/subjectApiSlice.js";
 import {useAddYearGroupMutation} from "../redux/slices/YearGroupApiSlice.js";
+import {toast} from "react-toastify";
 
 const Kanban = () => {
     const [teacherName, setTeacherName] = useState("");
@@ -73,6 +74,7 @@ const Kanban = () => {
             const res = await registerTeacher(
                 {name:teacherName, email:teacherEmail, password:teacherPassword}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -85,6 +87,7 @@ const Kanban = () => {
         try {
             const res = await addAcademicYear({name:academicYearName, fromYear:ayFrom, toYear:ayTo}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -96,6 +99,7 @@ const Kanban = () => {
         try {
             const res = await addAcademicTerm({name:termName, description:termDescription}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -108,6 +112,7 @@ const Kanban = () => {
         try {
             const res = await addClassLevel({name:classLevel, description:clDescription}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -120,6 +125,7 @@ const Kanban = () => {
         try {
             const res = await addProgram({name: programName, description: progDescription}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -131,6 +137,7 @@ const Kanban = () => {
         try {
             const res = await addSubject({name:subjectName, description:subjectDescription, academicTerm:academicTermId, programID}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -142,6 +149,7 @@ const Kanban = () => {
         try {
             const res = await addYearGroup({name:yearGroupName, academicYear:academicYearId}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)
@@ -153,6 +161,7 @@ const Kanban = () => {
         try {
             const res = await addStudent({name:studentName, email:studentEmail, password:studentPassword}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(res, message);
         }catch (e) {
             console.log(e)

@@ -4,6 +4,7 @@ import {useGetStudentByAdminQuery, useUpdateStudentByAdminMutation} from "../../
 import {useGetAllProgramsQuery} from "../../redux/slices/programApiSlice.js";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
+import {toast} from "react-toastify";
 
 const StudentsManagement = () => {
     const [formData, setFormData] = useState({
@@ -68,6 +69,7 @@ const StudentsManagement = () => {
         try {
             const res = await updateStudent({data: formData, id: studentId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

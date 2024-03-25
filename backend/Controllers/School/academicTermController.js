@@ -54,7 +54,7 @@ exports.updateAcademicTerms = AsyncHandler(async (req, res) => {
     const updateData = {};
 
     if (name) {
-        const existingTerm = await AcademicTerm.findOne({ name, _id: { $ne: req.params.id } }); // Exclude current term
+        const existingTerm = await AcademicTerm.findOne({ name, _id: { $ne: req.params.id } });
         if (existingTerm) {
             return res.status(400).json({ message: "Academic term name already exists" });
         }

@@ -6,6 +6,7 @@ import {
     useUpdateProgramMutation
 } from "../../redux/slices/programApiSlice.js";
 import {useGetAllSubjectsQuery} from "../../redux/slices/subjectApiSlice.js";
+import {toast} from "react-toastify";
 
 const ProgramsManagement = () => {
     const [formData, setFormData] = useState({
@@ -55,6 +56,7 @@ const ProgramsManagement = () => {
         try {
             const res = await addSubjectToProgram({id: programId, data: formData}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
@@ -68,6 +70,7 @@ const ProgramsManagement = () => {
         try {
             const res = await deleteProgram({id: programId}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

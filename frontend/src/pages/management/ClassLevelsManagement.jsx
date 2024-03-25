@@ -5,6 +5,7 @@ import {
     useGetClassLevelQuery,
     useUpdateClassLevelMutation
 } from "../../redux/slices/classLevelSlice.js";
+import {toast} from "react-toastify";
 
 const ClassLevelsManagement = () => {
     const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const ClassLevelsManagement = () => {
         try {
             const res = await updateClassLevel({id: classLevelId, data: formData}).unwrap();
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

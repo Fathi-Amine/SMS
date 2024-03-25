@@ -6,6 +6,7 @@ import {
     useUpdateYearGroupMutation
 } from "../../redux/slices/YearGroupApiSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
+import {toast} from "react-toastify";
 
 const YearGroupsManagement = () => {
     const [formData, setFormData] = useState({
@@ -40,6 +41,7 @@ const YearGroupsManagement = () => {
         try {
             const res = await updateGroupYear({data: formData, id: groupId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
@@ -53,6 +55,7 @@ const YearGroupsManagement = () => {
         try {
             const res = await deleteGroupYear({id: groupId}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)

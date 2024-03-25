@@ -5,6 +5,7 @@ import {useGetAllProgramsQuery} from "../../redux/slices/programApiSlice.js";
 import {useGetAllClassLevelsQuery} from "../../redux/slices/classLevelSlice.js";
 import {useGetAllAcademicYearsQuery} from "../../redux/slices/academicYearSlice.js";
 import {useGetAllSubjectsQuery} from "../../redux/slices/subjectApiSlice.js";
+import {toast} from "react-toastify";
 
 const TeacherManagement = () => {
     const [formData, setFormData] = useState({
@@ -88,6 +89,8 @@ const TeacherManagement = () => {
             console.log(formData, teacherID)
             const res = await updateTeacher({data:formData,teacherID}).unwrap();
             const {message} = res;
+            toast.success(message)
+
             console.log(message)
         }catch (e) {
             console.log(e)

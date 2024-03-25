@@ -5,6 +5,7 @@ import {
     useGetAcademicYearQuery,
     useUpdateAcademicYearMutation
 } from "../../redux/slices/academicYearSlice.js";
+import {toast} from "react-toastify";
 
 const AcademicYearsManagement = () => {
     const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ const AcademicYearsManagement = () => {
         try {
             const res = await updateAcademicYear({id: academicYearId, data: formData}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
@@ -50,6 +52,7 @@ const AcademicYearsManagement = () => {
         try {
             const res = await deleteAcademicYear({id: academicYearId}).unwrap();
             const {message} = res;
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
