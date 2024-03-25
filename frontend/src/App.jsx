@@ -10,10 +10,13 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import TeacherDashboard from "./pages/teacherDashboard.jsx";
 import PrivateRoute from "./components/PrivateRoutes.jsx";
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
     return (
         <Router>
+            <ToastContainer />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />

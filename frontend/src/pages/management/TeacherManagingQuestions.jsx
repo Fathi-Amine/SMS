@@ -7,6 +7,7 @@ import {useGetAllSubjectsQuery} from "../../redux/slices/subjectApiSlice.js";
 import {useGetAllProgramsQuery} from "../../redux/slices/programApiSlice.js";
 import {useGetAllExamsQuery, useGetExamQuery, useUpdateExamMutation} from "../../redux/slices/examApiSlice.js";
 import {useGetQuestionQuery, useUpdateQuestionMutation} from "../../redux/slices/questionApiSlice.js";
+import {toast} from "react-toastify";
 
 const TeacherManagingQuestions = () => {
     const [formData, setFormData] = useState({
@@ -36,6 +37,7 @@ const TeacherManagingQuestions = () => {
         try {
             const res = await updateQuestion({id: questionId, data: formData}).unwrap()
             const {message} = res
+            toast.success(message)
             console.log(message)
         }catch (e) {
             console.log(e)
