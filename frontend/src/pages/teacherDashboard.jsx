@@ -7,6 +7,8 @@ import {TooltipComponent} from "@syncfusion/ej2-react-popups";
 import {Exams} from "./index.jsx";
 import TeacherManagingExams from "./management/TeacherManagingExams.jsx";
 import TeacherDataEntry from "./TeacherDataEntry.jsx";
+import Questions from "./Questions.jsx";
+import TeacherManagingQuestions from "./management/TeacherManagingQuestions.jsx";
 
 const TeacherDashboard = () => {
     const menu = useSelector(state => state.interactivity.menu);
@@ -45,8 +47,10 @@ const TeacherDashboard = () => {
                             {/* Dashboard*/}
                             <Route path={"/dashboard"} element={<Exams />}/>
                             <Route path={"/exams"} element={<Exams />}/>
+                            <Route path={"/questions"} element={<Questions />}/>
                             <Route path={"/data-entry"} element={<TeacherDataEntry />}/>
                             <Route path={"/manage/exams/:id"} element={<TeacherManagingExams />}/>
+                            <Route path={"/manage/question/:id"} element={<TeacherManagingQuestions />}/>
 
                         </Routes>
                     </div>
