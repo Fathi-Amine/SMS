@@ -12,7 +12,13 @@ import {BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft,
 import { BiColorFill } from 'react-icons/bi';
 import { IoMdContacts } from 'react-icons/io';
 import {RiContactsLine, RiMiniProgramLine, RiStockLine} from 'react-icons/ri';
-import {MdGroups2, MdOutlineAdminPanelSettings, MdOutlineSubject, MdOutlineSupervisorAccount} from 'react-icons/md';
+import {
+  MdGroups2,
+  MdOutlineAdminPanelSettings,
+  MdOutlineDashboardCustomize,
+  MdOutlineSubject,
+  MdOutlineSupervisorAccount
+} from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
 import {GiCalendarHalfYear, GiLevelEndFlag, GiLouvrePyramid} from 'react-icons/gi';
@@ -528,8 +534,8 @@ export const links = [
     title: 'Dashboard',
     links: [
       {
-        name: 'ecommerce',
-        icon: <FiShoppingBag />,
+        name: 'dashboard',
+        icon: <MdOutlineDashboardCustomize />,
       },
     ],
   },
@@ -583,58 +589,8 @@ export const links = [
     title: 'Apps',
     links: [
       {
-        name: 'calendar',
-        icon: <AiOutlineCalendar />,
-      },
-      {
         name: 'data-entry',
         icon: <BsDatabaseAdd />,
-      },
-      {
-        name: 'editor',
-        icon: <FiEdit />,
-      },
-      {
-        name: 'color-picker',
-        icon: <BiColorFill />,
-      },
-    ],
-  },
-  {
-    title: 'Charts',
-    links: [
-      {
-        name: 'line',
-        icon: <AiOutlineStock />,
-      },
-      {
-        name: 'area',
-        icon: <AiOutlineAreaChart />,
-      },
-
-      {
-        name: 'bar',
-        icon: <AiOutlineBarChart />,
-      },
-      {
-        name: 'pie',
-        icon: <FiPieChart />,
-      },
-      {
-        name: 'financial',
-        icon: <RiStockLine />,
-      },
-      {
-        name: 'color-mapping',
-        icon: <BsBarChart />,
-      },
-      {
-        name: 'pyramid',
-        icon: <GiLouvrePyramid />,
-      },
-      {
-        name: 'stacked',
-        icon: <AiOutlineBarChart />,
       },
     ],
   },
@@ -726,16 +682,16 @@ export const earningData = [
     icon: <MdOutlineSupervisorAccount />,
     amount: '39,354',
     percentage: '-4%',
-    title: 'Customers',
+    title: 'Students',
     iconColor: '#03C9D7',
     iconBg: '#E5FAFB',
     pcColor: 'red-600',
   },
   {
-    icon: <BsBoxSeam />,
+    icon: <LiaChalkboardTeacherSolid />,
     amount: '4,396',
     percentage: '+23%',
-    title: 'Products',
+    title: 'Teachers',
     iconColor: 'rgb(255, 244, 229)',
     iconBg: 'rgb(254, 201, 15)',
     pcColor: 'green-600',
@@ -744,7 +700,7 @@ export const earningData = [
     icon: <FiBarChart />,
     amount: '423,39',
     percentage: '+38%',
-    title: 'Sales',
+    title: 'Promoted',
     iconColor: 'rgb(228, 106, 118)',
     iconBg: 'rgb(255, 244, 229)',
 
@@ -754,7 +710,7 @@ export const earningData = [
     icon: <HiOutlineRefresh />,
     amount: '39,354',
     percentage: '-12%',
-    title: 'Refunds',
+    title: 'Programs',
     iconColor: 'rgb(0, 194, 146)',
     iconBg: 'rgb(235, 250, 242)',
     pcColor: 'red-600',

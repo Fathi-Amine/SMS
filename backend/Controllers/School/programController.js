@@ -58,6 +58,7 @@ exports.updateProgram = AsyncHandler(async (req, res) => {
     }
 
     updateData.description = description;
+    console.log(updateData)
 
     const program = await Program.findByIdAndUpdate(
         req.params.id,
@@ -86,14 +87,15 @@ exports.deleteProgram = AsyncHandler(async (req, res) => {
 
 
 exports.addSubjectToProgram = AsyncHandler(async (req, res) => {
-    const { name } = req.body;
+    const { subject } = req.body;
+    console.log(name)
     //get the program
     const program = await Program.findById(req.params.id);
     if (!program) {
         throw new Error("Program not found");
     }
     //Find the subject
-    const subjectFound = await Subject.findOne({ name });
+    const subjectFound = await Subject.findOne({ subject });
     if (!subjectFound) {
         throw new Error("Subject not found");
     }

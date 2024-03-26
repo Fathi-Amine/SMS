@@ -3,6 +3,8 @@ const Token = require('../../Models/Global/Token');
 const AsyncHandler = require('express-async-handler');
 const {genPassword, attachCookieToResponse} = require("../../Utils/authUtils");
 const crypto = require('crypto');
+const ExamResults = require('../../Models/Academic/ExamResults');
+const Teacher = require('../../Models/Staff/Teacher');
 
 const registerAdmin = AsyncHandler(async (req, res) => {
     const {name, email, password} = req.body;
@@ -80,17 +82,20 @@ const loginAdmin = AsyncHandler(async (req, res) => {
     }
 })
 
-const logoutAdmin =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Admin logged out successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
-        });
-    }
-}
+const logoutAdmin =AsyncHandler(async (req,res)=>{
+
+            await Token.findOneAndDelete({user:req.user.id})
+            res.cookie('accessToken','logout', {
+                httpOnly: true,
+                expires: new Date(Date.now())
+            })
+            res.cookie('refreshToken','logout', {
+                httpOnly: true,
+                expires: new Date(Date.now())
+            })
+            res.status(200).json({message:"Logged Out"})
+        }
+)
 
 const getAllAdmins = AsyncHandler(async (req, res) => {
     const admins = await Admin.find().select('-hash -salt -token -__v -updatedAt -createdAt');
@@ -142,76 +147,80 @@ const updateAdmin = AsyncHandler(async (req, res) => {
     });
 })
 
-const deleteAdmin =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Admin deleted successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
-        });
-    }
-}
 
 const suspendTeacher =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Teacher suspended successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
+    const {id} = req.params;
+    const teacherExists = await Teacher.findById(id);
+    if (!teacherExists) {
+        return res.status(404).json({
+            message: 'Teacher not found'
         });
     }
+    teacherExists.isSuspended = true;
+    await teacherExists.save();
+    res.status(200).json({
+        message: 'Teacher suspended successfully'
+    });
 }
 
 const unsuspendTeacher =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Teacher activated successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
+    const {id} = req.params;
+    const teacherExists = await Teacher.findById(id);
+    if (!teacherExists) {
+        return res.status(404).json({
+            message: 'Teacher not found'
         });
     }
+    teacherExists.isSuspended = false;
+    await teacherExists.save();
+    res.status(200).json({
+        message: 'Teacher unsuspended successfully'
+    });
 }
 
 const withdrawTeacher =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Teacher withdrawn successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
+    const {id} = req.params;
+    const teacherExists = await Teacher.findById(id);
+    if (!teacherExists) {
+        return res.status(404).json({
+            message: 'Teacher not found'
         });
     }
+    teacherExists.isWithdrawn = true;
+    await teacherExists.save();
+    res.status(200).json({
+        message: 'Teacher withdrawn successfully'
+    });
 }
 
 const unwithdrawTeacher =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Teacher unwithdrawn successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
+    const {id} = req.params;
+    const teacherExists = await Teacher.findById(id);
+    if (!teacherExists) {
+        return res.status(404).json({
+            message: 'Teacher not found'
         });
     }
+    teacherExists.isWithdrawn = false;
+    await teacherExists.save();
+    res.status(200).json({
+        message: 'Teacher unwithdrawn successfully'
+    });
 }
 
 const publishExamResults =async (req, res) => {
-    try {
-        res.status(200).json({
-            message: 'Exam results published successfully'
-        });
-    }catch (e) {
-        res.status(500).json({
-            message: 'Internal server error'
+    const {id} = req.params;
+    const examResults = await ExamResults.findById(id);
+    if (!examResults) {
+        return res.status(404).json({
+            message: 'Exam results not found'
         });
     }
+    examResults.isPublished = true;
+    await examResults.save();
+    res.status(200).json({
+        message: 'Exam results published successfully'
+    });
 }
 
 const unpublishExamResults =async (req, res) => {
@@ -232,7 +241,6 @@ module.exports = {
     getAllAdmins,
     getAdminProfile,
     updateAdmin,
-    deleteAdmin,
     suspendTeacher,
     unsuspendTeacher,
     withdrawTeacher,

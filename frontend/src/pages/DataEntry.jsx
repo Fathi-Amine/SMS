@@ -10,7 +10,7 @@ import {useAddSubjectMutation} from "../redux/slices/subjectApiSlice.js";
 import {useAddYearGroupMutation} from "../redux/slices/YearGroupApiSlice.js";
 import {toast} from "react-toastify";
 
-const Kanban = () => {
+const DataEntry = () => {
     const [teacherName, setTeacherName] = useState("");
     const [teacherEmail, setTeacherEmail] = useState("");
     const [teacherPassword, setTeacherPassword] = useState("");
@@ -497,4 +497,4 @@ const Kanban = () => {
     )
 }
 
-export default Kanban;
+export default DataEntry;

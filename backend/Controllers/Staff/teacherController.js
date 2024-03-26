@@ -1,4 +1,4 @@
-const AysncHandler = require("express-async-handler");
+const AsyncHandler = require("express-async-handler");
 const Teacher = require("../../Models/Staff/Teacher");
 const { genPassword, validPassword } = require("../../Utils/authUtils");
 const Token = require("../../Models/Global/Token");
@@ -11,7 +11,7 @@ const AcademicYear = require("../../Models/Academic/AcademicYear");
 const Subject = require("../../Models/Academic/Subject");
 
 
-exports.adminRegisterTeacher = AysncHandler(async (req, res) => {
+exports.adminRegisterTeacher = AsyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
 
     const adminFound = await Admin.findById(req.user.id);
@@ -43,7 +43,7 @@ exports.adminRegisterTeacher = AysncHandler(async (req, res) => {
     });
 });
 
-exports.teacherLogin = AysncHandler(async (req, res) => {
+exports.teacherLogin = AsyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const teacher = await Teacher.findOne({ email });
     if (!teacher) {
@@ -95,7 +95,22 @@ exports.teacherLogin = AysncHandler(async (req, res) => {
     }
 });
 
-exports.adminGettingAllTeachers = AysncHandler(async (req, res) => {
+exports.logoutTeacher = AsyncHandler(async (req,res)=>{
+
+        await Token.findOneAndDelete({user:req.user.id})
+        res.cookie('accessToken','logout', {
+            httpOnly: true,
+            expires: new Date(Date.now())
+        })
+        res.cookie('refreshToken','logout', {
+            httpOnly: true,
+            expires: new Date(Date.now())
+        })
+        res.status(200).json({message:"Logged Out"})
+    }
+)
+
+exports.adminGettingAllTeachers = AsyncHandler(async (req, res) => {
     const teachers = await Teacher.find().select("-hash -salt -token");
     res.status(200).json({
         status: "success",
@@ -104,7 +119,7 @@ exports.adminGettingAllTeachers = AysncHandler(async (req, res) => {
     });
 });
 
-exports.getTeacherByAdmin = AysncHandler(async (req, res) => {
+exports.getTeacherByAdmin = AsyncHandler(async (req, res) => {
     const teacherID = req.params.teacherID;
     //find the teacher
     const teacher = await Teacher.findById(teacherID).populate("subject");
@@ -118,7 +133,7 @@ exports.getTeacherByAdmin = AysncHandler(async (req, res) => {
     });
 });
 
-exports.getTeacherProfile = AysncHandler(async (req, res) => {
+exports.getTeacherProfile = AsyncHandler(async (req, res) => {
     const teacher = await Teacher.findById(req.user?.id).select(
         "-hash -salt -createdAt -updatedAt"
     );
@@ -133,7 +148,7 @@ exports.getTeacherProfile = AysncHandler(async (req, res) => {
 });
 
 
-exports.teacherUpdateProfile = AysncHandler(async (req, res) => {
+exports.teacherUpdateProfile = AsyncHandler(async (req, res) => {
     const {name, email, password} = req.body;
     const {hash, salt} = genPassword(password);
     if (email !== req.user.email) {
@@ -158,7 +173,7 @@ exports.teacherUpdateProfile = AysncHandler(async (req, res) => {
 });
 
 
-exports.adminUpdateTeacher = AysncHandler(async (req, res) => {
+exports.adminUpdateTeacher = AsyncHandler(async (req, res) => {
     const { program, classLevel, academicYear, assignedSubject } = req.body;
     const updates = {};
     //if email is taken

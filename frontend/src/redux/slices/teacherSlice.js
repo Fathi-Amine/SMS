@@ -18,7 +18,7 @@ export const teacherApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
-        logout: builder.mutation({
+        logoutTeacher: builder.mutation({
             query:(arg)=> ({
                 url: `${TEACHERS_URL}/logout`,
                 method: 'DELETE'
@@ -52,4 +52,4 @@ export const teacherApiSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useLoginTeacherMutation, useRegisterTeacherMutation, useLogoutMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery, useUpdateTeacherByAdminMutation} = teacherApiSlice;
+export const {useLoginTeacherMutation, useRegisterTeacherMutation, useLogoutTeacherMutation, useGetAllTeachersQuery, useGetTeacherByIdQuery, useUpdateTeacherByAdminMutation} = teacherApiSlice;

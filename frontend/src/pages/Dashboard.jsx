@@ -29,6 +29,7 @@ import {
     TeacherManagement,
     YearGroupManagement
 } from "./management/index.jsx";
+import AdminDashboard from "./AdminDashboard.jsx";
 
 const Dashboard = () => {
     const menu = useSelector(state => state.interactivity.menu);
@@ -67,8 +68,8 @@ const Dashboard = () => {
                         <div>
                             <Routes>
                                 {/* Dashboard*/}
-                                <Route path={"/dashy"} element={<Ecommerce />}/>
-                                <Route path={"/ecommerce"} element={<Ecommerce/>}/>
+                                <Route path={"/dashy"} element={<AdminDashboard />}/>
+                                <Route path={"/dashboard"} element={<AdminDashboard/>}/>
                                 {/*Pages*/}
                                 <Route path={"/teachers"} element={<Teachers/>}/>
                                 <Route path={"/students"} element={<Students/>}/>

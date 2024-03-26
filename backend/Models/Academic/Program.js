@@ -38,14 +38,12 @@ const ProgramSchema = new Schema(
             ref: "Admin",
             required: true,
         },
-        //we will push the teachers that are in charge of the program
         teachers: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "Teacher",
             },
         ],
-        //we will push the students that are in the program when the program is created
         students: [
             {
                 type: Schema.Types.ObjectId,
@@ -53,7 +51,6 @@ const ProgramSchema = new Schema(
                 default: [],
             },
         ],
-        //we will push the subjects that are in the program when the program is created
         subjects: [
             {
                 type: Schema.Types.ObjectId,

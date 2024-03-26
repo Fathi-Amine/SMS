@@ -11,7 +11,7 @@ const Sidebar = () => {
     const menu = useSelector(state => state.interactivity.menu);
     const screenSize = useSelector(state => state.interactivity.screenSize);
     const userInfo = useSelector(state => state.auth.userInfo);
-    const activeLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-white text-md m-2";
+    const activeLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-md m-2";
     const normalLink = "flex items-center gap-5 pt-3 pb-2.5 pl-4 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2"
     const dispatch = useDispatch();
 

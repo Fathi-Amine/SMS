@@ -81,10 +81,61 @@ const deleteAcademicYear = AsyncHandler(async (req, res) => {
     });
 });
 
+const pushStudentToAcademicYear = AsyncHandler(async (req, res) => {
+    const { studentID, academicYearID } = req.body;
+    const academicYear =
+        await AcademicYear.findById(academicYearID);
+    if (!academicYear) {
+        res.status(404);
+        throw new Error("Academic year not found");
+    }
+    academicYear.students.push(studentID);
+    await academicYear.save();
+    res.status(200).json({
+        status: "success",
+        message: "Student added to academic year successfully",
+    });
+});
+
+const removeStudentFromAcademicYear = AsyncHandler(async (req, res) => {
+    const { studentID, academicYearID } = req.body;
+    const academicYear =
+        await AcademicYear.findById(academicYearID);
+    if (!academicYear) {
+        res.status(404);
+        throw new Error("Academic year not found");
+    }
+    academicYear.students = academicYear.students.filter(student => student !== studentID);
+    await academicYear.save();
+    res.status(200).json({
+        status: "success",
+        message: "Student removed from academic year successfully",
+    });
+});
+
+const pullStudentFromAcademicYear = AsyncHandler(async (req, res) => {
+    const { studentID, academicYearID } = req.body;
+    const academicYear =
+        await AcademicYear.findById(academicYearID);
+    if (!academicYear) {
+        res.status(404);
+        throw new Error("Academic year not found");
+    }
+    academicYear.students.pull(studentID);
+    await academicYear.save();
+    res.status(200).json({
+        status: "success",
+        message: "Student removed from academic year successfully",
+    });
+});
+
+
 module.exports = {
     createAcademicYear,
     getAcademicYears,
     getAcademicYear,
     updateAcademicYear,
     deleteAcademicYear,
+    pushStudentToAcademicYear,
+    removeStudentFromAcademicYear
 }

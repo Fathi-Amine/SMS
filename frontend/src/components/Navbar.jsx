@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AiOutlineMenu} from "react-icons/ai";
+import {AiOutlineLogout, AiOutlineMenu} from "react-icons/ai";
 import { FiShoppingCart } from "react-icons/fi";
 import { BsChatLeft } from "react-icons/bs";
 import { RiNotification3Line} from "react-icons/ri";
@@ -16,6 +16,7 @@ import {
     toggleUserProfile,
     setScreenSize
 } from "../redux/interactivitySlices.js";
+import Logout from "./Logout.jsx";
 
 const NavButton = ({title, customFunc, icon, color, dotColor}) => (
     <TooltipComponent content={title} position={"BottomCenter"}>
@@ -28,6 +29,8 @@ const NavButton = ({title, customFunc, icon, color, dotColor}) => (
     </TooltipComponent>
 )
 const Navbar = () => {
+    const {userInfo} = useSelector((state)=>state.auth)
+
     const screenSize = useSelector(state => state.interactivity.screenSize);
     const menu = useSelector(state => state.interactivity.menu);
     const activeComponent = useSelector((state) => state.interactivity.activeComponent);
@@ -64,13 +67,9 @@ const Navbar = () => {
                 color={"blue"}
                 icon={<AiOutlineMenu />}
             />
+
             <div className={"flex"}>
-                <NavButton
-                    title={"Cart"}
-                    customFunc={() => handleCartClick()}
-                    color={"blue"}
-                    icon={<FiShoppingCart />}
-                />
+                <Logout />
                 <NavButton
                     title={"Chat"}
                     dotColor={"#03C9D7"}
@@ -94,8 +93,14 @@ const Navbar = () => {
                     >
                         <img src={avatar} alt={"avatar"} className={"w-8 h-8 rounded-full"} />
                         <p>
-                            <span className={"text-gray-400 text-14"}>Hi,</span>
-                            <span className={"text-gray-400 font-bold ml-1 text-14"}>Amine</span>
+                            {userInfo ? (
+                                <span className={"text-gray-400 text-14"}>Hi,{userInfo.data?.name}</span>
+                            ) : (
+                                <span className={"text-gray-400 text-14"}>Welcome</span>
+
+                            )}
+                           {/* <span className={"text-gray-400 text-14"}>Hi,</span>
+                            <span className={"text-gray-400 font-bold ml-1 text-14"}>Amine</span>*/}
                         </p>
                         <MdKeyboardArrowDown className={"text-gray-400 text-14"}/>
                     </div>

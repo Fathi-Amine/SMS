@@ -6,7 +6,7 @@ import { earningData, SparklineAreaData, ecomPieChartData } from "../data/dummy.
 import {useDispatch} from "react-redux";
 import {useGetAllAdminsQuery} from "../redux/slices/adminApiSlice.js";
 
-const Ecommerce = () => {
+const AdminDashboard = () => {
     const [admins, setAdmins] = useState([])
 
     const {data, isLoading, isError, error } = useGetAllAdminsQuery()
@@ -118,4 +118,4 @@ const Ecommerce = () => {
     );
 };
 
-export default Ecommerce;
+export default AdminDashboard;

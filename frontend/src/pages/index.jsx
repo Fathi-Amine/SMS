@@ -1,6 +1,6 @@
 
-export { default as Ecommerce } from './Ecommerce';
-export { default as Kanban } from './Kanban';
+export { default as Ecommerce } from './AdminDashboard.jsx';
+export { default as Kanban } from './DataEntry.jsx';
 export { default as Teachers } from './Teachers.jsx';
 export { default as Students } from './Students.jsx';
 export { default as Editor } from './Editor';

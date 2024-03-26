@@ -1,5 +1,7 @@
 const express = require('express');
-const {adminRegisterTeacher, teacherLogin, adminGettingAllTeachers, getTeacherByAdmin, getTeacherProfile, teacherUpdateProfile, adminUpdateTeacher} = require("../../Controllers/Staff/teacherController");
+const {adminRegisterTeacher, teacherLogin, adminGettingAllTeachers, getTeacherByAdmin, getTeacherProfile, teacherUpdateProfile, adminUpdateTeacher,
+    logoutTeacher
+} = require("../../Controllers/Staff/teacherController");
 const teacherRoutes = express.Router();
 
 const {authMiddleware} = require('../../Middlewares/authMiddleware');
@@ -9,6 +11,8 @@ const isTeacherMiddleware = require('../../Middlewares/isTeacherMiddleware');
 teacherRoutes.post('/register', authMiddleware, isAdminMiddleware , adminRegisterTeacher);
 
 teacherRoutes.post('/login', teacherLogin);
+
+teacherRoutes.delete('/logout', authMiddleware, isTeacherMiddleware, logoutTeacher);
 
 teacherRoutes.get('/all', authMiddleware, isAdminMiddleware, adminGettingAllTeachers);
 

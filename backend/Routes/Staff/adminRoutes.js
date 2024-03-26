@@ -23,7 +23,7 @@ adminRoutes.post('/register', registerAdmin);
 
 adminRoutes.post('/login', loginAdmin);
 
-adminRoutes.post('/logout', logoutAdmin)
+adminRoutes.delete('/logout', authMiddleware, isAdminMiddleware ,logoutAdmin)
 
 adminRoutes.get('/',authMiddleware, getAllAdmins);
 
@@ -32,8 +32,6 @@ adminRoutes.get('/profile', authMiddleware, isAdminMiddleware, getAdminProfile);
 // Update a single admin
 adminRoutes.put('/update-admin',authMiddleware,isAdminMiddleware, updateAdmin);
 
-// Delete a single admin
-adminRoutes.delete('/delete-admin/:id', deleteAdmin);
 
 // admin suspending teacher
 adminRoutes.put('/suspend/teacher/:id', suspendTeacher);

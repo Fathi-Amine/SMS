@@ -54,6 +54,7 @@ const ProgramsManagement = () => {
     const handleAddSubjectSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log(formData)
             const res = await addSubjectToProgram({id: programId, data: formData}).unwrap();
             const {message} = res;
             toast.success(message)

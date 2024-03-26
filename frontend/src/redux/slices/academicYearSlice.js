@@ -36,7 +36,14 @@ export const academicYearApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             })
         }),
+        addStudentToAcademicYear: builder.mutation({
+            query:({studentID, academicYearID})=>({
+                url: `${ACADEMIC_YEARS_URL}/assign`,
+                method: 'PUT',
+                body: {studentID, academicYearID}
+            })
+        }),
     })
 })
 
-export const {useAddAcademicYearMutation, useGetAllAcademicYearsQuery, useGetAcademicYearQuery, useUpdateAcademicYearMutation, useDeleteAcademicYearMutation} = academicYearApiSlice;
+export const {useAddAcademicYearMutation, useGetAllAcademicYearsQuery, useGetAcademicYearQuery, useUpdateAcademicYearMutation, useDeleteAcademicYearMutation, useAddStudentToAcademicYearMutation} = academicYearApiSlice;
