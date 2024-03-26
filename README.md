@@ -26,7 +26,7 @@ SMS is an online platform designed to manage a school staff and academic program
 ## Project Overview
 
 Presentation General
-My Time is an online platform that allows users to purchase school supplies from their local library from the comfort of their homes.
+SMS is an online platform that allows users to manage schools .
 
 ## Target Audience
 
